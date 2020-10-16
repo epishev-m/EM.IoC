@@ -1,31 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-
+﻿
 namespace EM.IoC
 {
-	public sealed class ReflectionInfo : IReflectionInfo
+	using EM.Foundation;
+	using System;
+	using System.Collections.Generic;
+	using System.Reflection;
+
+	public sealed class ReflectionInfo :
+		IReflectionInfo
 	{
 		#region IReflectionInfo
 
-		public ConstructorInfo ConstructorInfo => _constructorInfo;
+		public ConstructorInfo ConstructorInfo => constructorInfo;
 
-		public IEnumerable<Type> ParameterTypes => _parameterTypes;
+		public IEnumerable<Type> ParameterTypes => parameterTypes;
 
 		#endregion
 		#region ReflectionInfo
 
-		private readonly ConstructorInfo _constructorInfo;
+		private readonly ConstructorInfo constructorInfo;
 
-		private readonly IEnumerable<Type> _parameterTypes;
+		private readonly IEnumerable<Type> parameterTypes;
 
-		public ReflectionInfo(ConstructorInfo constructorInfo, IEnumerable<Type> parameterTypes)
+		public ReflectionInfo(
+			ConstructorInfo constructorInfo,
+			IEnumerable<Type> parameterTypes)
 		{
-			_constructorInfo = constructorInfo ??
-				throw new ArgumentNullException(nameof(constructorInfo));
+			Requires.IsNotNull(constructorInfo, nameof(constructorInfo));
+			Requires.IsNotNull(parameterTypes, nameof(parameterTypes));
 
-			_parameterTypes = parameterTypes ??
-				throw new ArgumentNullException(nameof(parameterTypes));
+			this.constructorInfo = constructorInfo;
+			this.parameterTypes = parameterTypes;
 		}
 
 		#endregion

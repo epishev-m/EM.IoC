@@ -1,12 +1,14 @@
-﻿using EM.Foundation;
-using System;
-using System.Linq;
-using System.Reflection;
-using Binder = EM.Foundation.Binder;
-
+﻿
 namespace EM.IoC
 {
-	public sealed class Reflector : IReflector
+	using EM.Foundation;
+	using System;
+	using System.Linq;
+	using System.Reflection;
+	using Binder = Foundation.Binder;
+
+	public sealed class Reflector :
+		IReflector
 	{
 		#region IReflector
 
@@ -15,10 +17,11 @@ namespace EM.IoC
 			return GetReflectionInfo(typeof(T));
 		}
 
-		public IReflectionInfo GetReflectionInfo(Type type)
+		public IReflectionInfo GetReflectionInfo(
+			Type type)
 		{
 			IReflectionInfo reflectionInfo;
-			var binding = _binder.GetBinding(type);
+			var binding = binder.GetBinding(type);
 
 			if (binding == null)
 			{
@@ -26,7 +29,7 @@ namespace EM.IoC
 				var parameters = constructorInfo.GetParameters();
 				var parameterTypes = parameters.Select(param => param.ParameterType);
 				reflectionInfo = new ReflectionInfo(constructorInfo, parameterTypes);
-				_binder.Bind(type).To(reflectionInfo);
+				binder.Bind(type).To(reflectionInfo);
 			}
 			else
 			{
@@ -39,9 +42,10 @@ namespace EM.IoC
 		#endregion
 		#region Reflector
 
-		private readonly IBinder _binder = new Binder();
+		private readonly IBinder binder = new Binder();
 
-		private ConstructorInfo GetConstructorInfo(Type type)
+		private ConstructorInfo GetConstructorInfo(
+			Type type)
 		{
 			var constructors = type.GetConstructors(
 				BindingFlags.FlattenHierarchy |

@@ -1,8 +1,13 @@
-﻿using EM.Foundation;
 
 namespace EM.IoC
 {
-	public sealed class DIBinding : IDIBinding, IDIBindingSingleton
+	using EM.Foundation;
+	using System;
+	using System.Linq;
+
+	public sealed class DIBinding :
+		IDIBinding,
+		IDIBindingSingleton
 	{
 		#region IDIBindingSingleton
 
@@ -14,22 +19,25 @@ namespace EM.IoC
 		#endregion
 		#region IDIBinding
 
-		public IDIBindingSingleton To<T>() where T : class, new()
+		public IDIBindingSingleton ToSelf()
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDIBindingSingleton To<T>()
+			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void To(
+			object obj)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public IDIBindingSingleton To(object obj)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public IDIBindingSingleton ToFactory<T>() where T : class, IFactory, new()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public IDIBindingSingleton ToFactory(IFactory factory)
+		public IDIBindingSingleton ToFactory<T>()
+			where T : class, IFactory
 		{
 			throw new System.NotImplementedException();
 		}
@@ -37,11 +45,29 @@ namespace EM.IoC
 		#endregion
 		#region DIBinding
 
-		private readonly IBinding _binding;
+		private readonly IReflector reflector;
 
-		public DIBinding(object key, object name, Resolver resolver)
+		private readonly IBinding binding;
+
+		public DIBinding(
+			IReflector reflector,
+			object key,
+			object name,
+			Resolver resolver)
 		{
-			_binding = new Binding(key, name, resolver);
+			Requires.IsNotNull(reflector, nameof(reflector));
+			Requires.IsNotNull(key, nameof(key));
+
+			this.reflector = reflector;
+			binding = new Binding(key, name, resolver);
+		}
+
+		private void CheckValues()
+		{
+			if (binding.Values != null)
+			{
+				throw new InvalidOperationException("value already set");
+			}
 		}
 
 		#endregion

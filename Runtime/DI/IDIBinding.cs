@@ -1,15 +1,22 @@
-﻿using EM.Foundation;
-
+﻿
 namespace EM.IoC
 {
+	using EM.Foundation;
+	
 	public interface IDIBinding
 	{
-		IDIBindingSingleton To<T>() where T : class, new();
+		IDIBindingSingleton To<T>()
+			where T : class;
 
-		IDIBindingSingleton To(object obj);
+		void To(
+			object obj);
 
-		IDIBindingSingleton ToFactory<T>() where T : class, IFactory, new();
+		IDIBindingSingleton ToSelf();
 
-		IDIBindingSingleton ToFactory(IFactory factory);
+		IDIBindingSingleton ToFactory<T>()
+			where T : class, IFactory;
+
+		IDIBindingSingleton ToFactory(
+			IFactory factory);
 	}
 }

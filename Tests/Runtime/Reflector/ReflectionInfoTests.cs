@@ -9,11 +9,12 @@ internal sealed class ReflectionInfoTests
 	[Test]
 	public void ReflectionInfo_ConstructorParam1_Exeprion()
 	{
-		// Act
+		// Arrange
 		var actual = false;
 		var param1 = default(ConstructorInfo);
 		var param2 = new List<Type>();
 
+		// Act
 		try
 		{
 			var reflectionInfo = new ReflectionInfo(param1, param2);
@@ -23,7 +24,7 @@ internal sealed class ReflectionInfoTests
 			actual = true;
 		}
 
-		//Assert
+		// Assert
 		Assert.IsTrue(actual);
 	}
 
@@ -45,7 +46,7 @@ internal sealed class ReflectionInfoTests
 			actual = true;
 		}
 
-		//Assert
+		// Assert
 		Assert.IsTrue(actual);
 	}
 

@@ -11,8 +11,6 @@ namespace EM.IoC
 		void To(
 			object obj);
 
-		IDIBindingSingleton ToSelf();
-
 		IDIBindingSingleton ToFactory<T>()
 			where T : class, IFactory;
 

@@ -1,11 +1,11 @@
-
+﻿
 namespace EM.IoC
 {
 	using EM.Foundation;
-	using System;
 	using System.Linq;
 
 	public sealed class DIBinding :
+		Binding,
 		IDIBinding,
 		IDIBindingSingleton
 	{
@@ -13,33 +13,73 @@ namespace EM.IoC
 
 		public void ToSingleton()
 		{
-			throw new System.NotImplementedException();
+			Requires.IsNotNull(Values, nameof(Values));
+
+			var value = Values.First();
+			var instanceProvider = value as IInstanceProvider;
+			instanceProvider = new InstanceProviderSingleton(instanceProvider);
+			RemoveAllValues();
+			var unused = base.To(instanceProvider);
 		}
 
 		#endregion
 		#region IDIBinding
 
-		public IDIBindingSingleton ToSelf()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IDIBindingSingleton To<T>()
+		public new IDIBindingSingleton To<T>()
 			where T : class
 		{
-			throw new NotImplementedException();
+			Requires.IsNull(Values, nameof(Values));
+
+			var instanceProvider = new InstanceProviderActivator(
+				typeof(T),
+				reflector,
+				container);
+
+			var unused = base.To(instanceProvider);
+
+			return this;
 		}
 
-		public void To(
-			object obj)
+		public new void To(
+			object instance)
 		{
-			throw new System.NotImplementedException();
+			Requires.IsNull(Values, nameof(Values));
+			Requires.IsNotNull(instance, nameof(instance));
+			Requires.IsReferenceType(instance.GetType(), nameof(instance));
+
+			var instanceProvider = new InstanceProvider(instance);
+			var unused = base.To(instanceProvider);
 		}
 
 		public IDIBindingSingleton ToFactory<T>()
 			where T : class, IFactory
 		{
-			throw new System.NotImplementedException();
+			Requires.IsNull(Values, nameof(Values));
+
+			var instanceProvider = new InstanceProviderFactory(
+				new InstanceProviderActivator(
+					typeof(T),
+					reflector,
+					container));
+
+			var unused = base.To(instanceProvider);
+
+			return this;
+		}
+
+		public IDIBindingSingleton ToFactory(
+			IFactory factory)
+		{
+			Requires.IsNull(Values, nameof(Values));
+			Requires.IsNotNull(factory, nameof(factory));
+
+			var instanceProvider = new InstanceProviderFactory(
+				new InstanceProvider(
+					factory));
+
+			var unused = base.To(instanceProvider);
+
+			return this;
 		}
 
 		#endregion
@@ -47,27 +87,24 @@ namespace EM.IoC
 
 		private readonly IReflector reflector;
 
-		private readonly IBinding binding;
+		private readonly IDIContainer container;
 
 		public DIBinding(
 			IReflector reflector,
+			IDIContainer container,
 			object key,
 			object name,
-			Resolver resolver)
+			Resolver resolver) :
+			base(
+				key,
+				name,
+				resolver)
 		{
 			Requires.IsNotNull(reflector, nameof(reflector));
-			Requires.IsNotNull(key, nameof(key));
+			Requires.IsNotNull(container, nameof(container));
 
+			this.container = container;
 			this.reflector = reflector;
-			binding = new Binding(key, name, resolver);
-		}
-
-		private void CheckValues()
-		{
-			if (binding.Values != null)
-			{
-				throw new InvalidOperationException("value already set");
-			}
 		}
 
 		#endregion

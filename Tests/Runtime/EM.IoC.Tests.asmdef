@@ -1,6 +1,7 @@
 {
     "name": "EM.IoC.Tests",
     "references": [
+        "EM.Foundation",
         "EM.IoC"
     ],
     "includePlatforms": [

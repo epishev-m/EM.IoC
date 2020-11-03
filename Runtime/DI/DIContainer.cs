@@ -43,10 +43,10 @@ namespace EM.IoC
 			return GetInstance(typeof(T)) as T;
 		}
 
-		public void Unbind<T>()
+		public bool Unbind<T>()
 			where T : class
 		{
-			base.Unbind<T>();
+			return base.Unbind<T>();
 		}
 
 		#endregion

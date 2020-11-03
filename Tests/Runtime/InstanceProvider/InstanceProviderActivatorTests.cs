@@ -161,7 +161,7 @@ internal sealed class InstanceProviderActivatorTests
 			throw new NotImplementedException();
 		}
 
-		public void Unbind<T>()
+		public bool Unbind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();

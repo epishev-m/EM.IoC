@@ -14,7 +14,7 @@ namespace EM.IoC
 		IDIBinding Bind<T>()
 			where T : class;
 
-		void Unbind<T>()
+		bool Unbind<T>()
 			where T : class;
 	}
 }

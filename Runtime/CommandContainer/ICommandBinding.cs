@@ -5,16 +5,9 @@ namespace EM.IoC
 
 	public interface ICommandBinding
 	{
-		bool IsSequence
-		{
-			get;
-		}
-
-		ICommandBinding InParallel();
-
-		ICommandBinding InSequence();
-
 		ICommandBinding To<T>()
 			where T : ICommand;
+
+		void Execute(object data = null);
 	}
 }

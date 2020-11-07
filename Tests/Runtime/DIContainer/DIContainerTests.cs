@@ -33,17 +33,14 @@ internal sealed class DIContainerTests
 	public void DIContainer_Bind()
 	{
 		// Arrange
-		var expected = true;
 		var reflector = new Reflector();
 
 		// Act
 		var container = new DIContainer(reflector);
-		var binding = container.Bind<Test>();
-		var actual = binding is IDIBinding;
+		var actual = container.Bind<Test>();
 
 		//Assert
-		Assert.IsNotNull(binding);
-		Assert.AreEqual(expected, actual);
+		Assert.IsNotNull(actual);
 	}
 
 	#endregion

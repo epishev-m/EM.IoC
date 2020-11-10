@@ -1,11 +1,10 @@
 ﻿
 namespace EM.IoC
 {
-	using EM.Foundation;
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-	using Binder = Foundation.Binder;
 
 	public sealed class Reflector :
 		IReflector
@@ -21,19 +20,18 @@ namespace EM.IoC
 			Type type)
 		{
 			IReflectionInfo reflectionInfo;
-			var binding = binder.GetBinding(type);
 
-			if (binding == null)
+			if (reflectionInfoCache.TryGetValue(type, out var value))
+			{
+				reflectionInfo = value as IReflectionInfo;
+			}
+			else
 			{
 				var constructorInfo = GetConstructorInfo(type);
 				var parameters = constructorInfo.GetParameters();
 				var parameterTypes = parameters.Select(param => param.ParameterType);
 				reflectionInfo = new ReflectionInfo(constructorInfo, parameterTypes);
-				binder.Bind(type).To(reflectionInfo);
-			}
-			else
-			{
-				reflectionInfo = binding.Values.FirstOrDefault() as IReflectionInfo;
+				reflectionInfoCache.Add(type, reflectionInfo);
 			}
 
 			return reflectionInfo;
@@ -42,7 +40,12 @@ namespace EM.IoC
 		#endregion
 		#region Reflector
 
-		private readonly IBinder binder = new Binder();
+		private readonly Dictionary<Type, IReflectionInfo> reflectionInfoCache;
+
+		public Reflector()
+		{
+			reflectionInfoCache = new Dictionary<Type, IReflectionInfo>();
+		}
 
 		private ConstructorInfo GetConstructorInfo(
 			Type type)

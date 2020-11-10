@@ -133,7 +133,7 @@ internal sealed class DIContainerTests
 	}
 
 	[Test]
-	public void DIContainer_UnbindAndGetBinding_ReturnNull()
+	public void DIContainer_UnbindAndGetInstance_ReturnNull()
 	{
 		// Arrange
 		var reflector = new Reflector();
@@ -142,7 +142,7 @@ internal sealed class DIContainerTests
 		var container = new DIContainer(reflector);
 		var binding = container.Bind<Test>().To<Test>();
 		var unused = container.Unbind<Test>();
-		var actual = container.GetBinding<Test>();
+		var actual = container.GetInstance<Test>();
 
 		//Assert
 		Assert.IsNull(actual);

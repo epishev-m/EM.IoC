@@ -28,7 +28,7 @@ namespace EM.IoC
 			ReactTo(typeof(T), data);
 		}
 
-		public void ReactTo(
+		public virtual void ReactTo(
 			object trigger,
 			object data = null)
 		{
@@ -73,7 +73,7 @@ namespace EM.IoC
 		#endregion
 		#region CommandContainer
 
-		private readonly IDIContainer container;
+		protected readonly IDIContainer container;
 
 		protected readonly Pool<CommandSequence> poolSequences;
 

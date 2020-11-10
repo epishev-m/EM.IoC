@@ -54,8 +54,6 @@ namespace EM.IoC
 				name,
 				resolver)
 		{
-			Requires.IsType<ISignalCommandBindingComposite>(container, nameof(container));
-
 			isOneOff = false;
 		}
 

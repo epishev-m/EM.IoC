@@ -217,6 +217,66 @@ internal sealed class CommandContainerTests
 		Assert.IsTrue(actual);
 	}
 
+	[Test]
+	public void CommandContainer_UnbindAll()
+	{
+		// Arrange
+		var container = new DIContainer();
+		var commandContainer = new CommandContainer(container);
+		var expected = commandContainer.Bind<CommandTest>();
+
+		expected.InGlobal()
+		.InParallel()
+		.To<CommandTest>();
+
+		// Act
+		commandContainer.UnbindAll();
+		var actual = commandContainer.Bind<CommandTest>();
+
+		//Assert
+		Assert.AreNotEqual(expected, actual);
+	}
+
+	[Test]
+	public void CommandContainer_UnbindLifeTime_AreNotEqual()
+	{
+		// Arrange
+		var container = new DIContainer();
+		var commandContainer = new CommandContainer(container);
+		var expected = commandContainer.Bind<CommandTest>();
+
+		expected.InGlobal()
+		.InParallel()
+		.To<CommandTest>();
+
+		// Act
+		commandContainer.Unbind(LifeTime.Global);
+		var actual = commandContainer.Bind<CommandTest>();
+
+		//Assert
+		Assert.AreNotEqual(expected, actual);
+	}
+
+	[Test]
+	public void CommandContainer_UnbindLifeTime_AreEqual()
+	{
+		// Arrange
+		var container = new DIContainer();
+		var commandContainer = new CommandContainer(container);
+		var expected = commandContainer.Bind<CommandTest>();
+
+		expected.InLocal()
+		.InParallel()
+		.To<CommandTest>();
+
+		// Act
+		commandContainer.Unbind(LifeTime.Global);
+		var actual = commandContainer.Bind<CommandTest>();
+
+		//Assert
+		Assert.AreEqual(expected, actual);
+	}
+
 	#endregion
 	#region Nested
 

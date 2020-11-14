@@ -16,9 +16,9 @@ namespace EM.IoC
 			return base.InGlobal() as ISignalCommandBindingComposite;
 		}
 
-		public new ISignalCommandBindingComposite InScene()
+		public new ISignalCommandBindingComposite InLocal()
 		{
-			return base.InScene() as ISignalCommandBindingComposite;
+			return base.InLocal() as ISignalCommandBindingComposite;
 		}
 
 		#endregion

@@ -10,6 +10,6 @@ namespace EM.IoC
 
 		ISignalCommandBindingComposite InGlobal();
 
-		ISignalCommandBindingComposite InScene();
+		ISignalCommandBindingComposite InLocal();
 	}
 }

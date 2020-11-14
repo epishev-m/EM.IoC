@@ -10,6 +10,6 @@ namespace EM.IoC
 
 		IDIBinding InGlobal();
 
-		IDIBinding InScene();
+		IDIBinding InLocal();
 	}
 }

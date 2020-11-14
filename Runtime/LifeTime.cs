@@ -5,6 +5,6 @@ namespace EM.IoC
 	{
 		External,
 		Global,
-		Scene,
+		Local,
 	}
 }

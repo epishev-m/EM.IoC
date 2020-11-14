@@ -10,6 +10,6 @@ namespace EM.IoC
 
 		ICommandBindingComposite InGlobal();
 
-		ICommandBindingComposite InScene();
+		ICommandBindingComposite InLocal();
 	}
 }

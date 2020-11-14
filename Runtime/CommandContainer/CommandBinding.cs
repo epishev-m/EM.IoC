@@ -22,11 +22,11 @@ namespace EM.IoC
 			return this;
 		}
 
-		public ICommandBindingComposite InScene()
+		public ICommandBindingComposite InLocal()
 		{
-			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InScene));
+			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InLocal));
 
-			lifeTime = LifeTime.Scene;
+			lifeTime = LifeTime.Local;
 
 			return this;
 		}

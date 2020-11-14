@@ -1,4 +1,4 @@
-﻿using EM.Foundation;
+using EM.Foundation;
 using EM.IoC;
 using NUnit.Framework;
 using System;
@@ -125,7 +125,7 @@ internal sealed class DIBindingTests
 		{
 			binding.To(instance);
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -216,7 +216,7 @@ internal sealed class DIBindingTests
 		{
 			binding.To<Test>();
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -310,7 +310,7 @@ internal sealed class DIBindingTests
 	}
 
 	[Test]
-	public void DIBinding_ToFactory_IsNullException()
+	public void DIBinding_ToFactory_IsInvalidOperationException()
 	{
 		// Arrange
 		var actual = false;
@@ -326,7 +326,7 @@ internal sealed class DIBindingTests
 		{
 			binding.ToFactory(instance);
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -376,7 +376,7 @@ internal sealed class DIBindingTests
 	}
 
 	[Test]
-	public void DIBinding_ToFactoryGeneric_IsNullException()
+	public void DIBinding_ToFactoryGeneric_InvalidOperationException()
 	{
 		// Arrange
 		var actual = false;
@@ -391,7 +391,7 @@ internal sealed class DIBindingTests
 		{
 			binding.ToFactory<TestFactory>();
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -459,7 +459,7 @@ internal sealed class DIBindingTests
 	#region ToSingleton
 
 	[Test]
-	public void DIBinding_ToAndTo_IsNotNullException()
+	public void DIBinding_ToAndTo_IsInvalidOperationException()
 	{
 		// Arrange
 		var actual = false;
@@ -474,7 +474,7 @@ internal sealed class DIBindingTests
 		{
 			binding.ToSingleton();
 		}
-		catch (ArgumentNullException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}

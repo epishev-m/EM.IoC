@@ -23,11 +23,11 @@ namespace EM.IoC
 			return this;
 		}
 
-		public IDIBinding InScene()
+		public IDIBinding InLocal()
 		{
-			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InScene));
+			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InLocal));
 
-			lifeTime = LifeTime.Global;
+			lifeTime = LifeTime.Local;
 
 			return this;
 		}
@@ -39,7 +39,7 @@ namespace EM.IoC
 			where T : class
 		{
 			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(To));
-			Requires.IsNull(Values, nameof(Values));
+			Requires.IsValidOperation(Values == null, this, nameof(Values));
 
 			var instanceProvider = new InstanceProviderActivator(
 				typeof(T),
@@ -53,7 +53,7 @@ namespace EM.IoC
 			object instance)
 		{
 			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(To));
-			Requires.IsNull(Values, nameof(Values));
+			Requires.IsValidOperation(Values == null, this, nameof(Values));
 			Requires.IsNotNull(instance, nameof(instance));
 			Requires.IsReferenceType(instance.GetType(), nameof(instance));
 
@@ -66,7 +66,7 @@ namespace EM.IoC
 			where T : class, IFactory
 		{
 			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(ToFactory));
-			Requires.IsNull(Values, nameof(Values));
+			Requires.IsValidOperation(Values == null, this, nameof(Values));
 
 			var instanceProvider = new InstanceProviderFactory(
 				new InstanceProviderActivator(
@@ -83,7 +83,7 @@ namespace EM.IoC
 			IFactory factory)
 		{
 			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(ToFactory));
-			Requires.IsNull(Values, nameof(Values));
+			Requires.IsValidOperation(Values == null, this, nameof(Values));
 			Requires.IsNotNull(factory, nameof(factory));
 
 			var instanceProvider = new InstanceProviderFactory(
@@ -100,8 +100,7 @@ namespace EM.IoC
 
 		public void ToSingleton()
 		{
-			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(ToFactory));
-			Requires.IsNotNull(Values, nameof(Values));
+			Requires.IsValidOperation(Values != null, this, nameof(Values));
 
 			var value = Values.First();
 			var instanceProvider = value as IInstanceProvider;

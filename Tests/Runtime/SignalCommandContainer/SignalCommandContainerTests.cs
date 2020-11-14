@@ -5,6 +5,8 @@ using System;
 
 internal sealed class SignalCommandContainerTests
 {
+	#region Constructor
+
 	[Test]
 	public void SignalCommandContainer_Constructor_Exeption()
 	{
@@ -25,6 +27,9 @@ internal sealed class SignalCommandContainerTests
 		// Assert
 		Assert.IsTrue(actual);
 	}
+
+	#endregion
+	#region Bind
 
 	[Test]
 	public void SignalCommandContainer_Bind()
@@ -61,6 +66,9 @@ internal sealed class SignalCommandContainerTests
 		//Assert
 		Assert.IsNotNull(actual);
 	}
+
+	#endregion
+	#region ReactTo
 
 	[Test]
 	public void SignalCommandContainer_ReactTo()
@@ -106,6 +114,9 @@ internal sealed class SignalCommandContainerTests
 		Assert.AreEqual(expected, actual);
 	}
 
+	#endregion
+	#region Unbind
+
 	[Test]
 	public void SignalCommandContainer_Unbind_ReturnFalse()
 	{
@@ -139,6 +150,67 @@ internal sealed class SignalCommandContainerTests
 		Assert.IsTrue(actual);
 	}
 
+	[Test]
+	public void SignalCommandContainer_UnbindAll()
+	{
+		// Arrange
+		var container = new DIContainer();
+		var commandContainer = new SignalCommandContainer(container);
+		var expected = commandContainer.Bind<SignalTest>();
+
+		var unused = expected.InGlobal()
+			.InParallel()
+			.To<CommandTest>();
+
+		// Act
+		commandContainer.UnbindAll();
+		var actual = commandContainer.Bind<SignalTest>();
+
+		//Assert
+		Assert.AreNotEqual(expected, actual);
+	}
+
+	[Test]
+	public void SignalCommandContainer_UnbindLifiTime_AreNotEqual()
+	{
+		// Arrange
+		var container = new DIContainer();
+		var commandContainer = new SignalCommandContainer(container);
+		var expected = commandContainer.Bind<SignalTest>();
+
+		var unused = expected.InLocal()
+			.InParallel()
+			.To<CommandTest>();
+
+		// Act
+		commandContainer.Unbind(LifeTime.Local);
+		var actual = commandContainer.Bind<SignalTest>();
+
+		//Assert
+		Assert.AreNotEqual(expected, actual);
+	}
+
+	[Test]
+	public void SignalCommandContainer_UnbindLifiTime_AreEqual()
+	{
+		// Arrange
+		var container = new DIContainer();
+		var commandContainer = new SignalCommandContainer(container);
+		var expected = commandContainer.Bind<SignalTest>();
+
+		var unused = expected.InGlobal()
+			.InParallel()
+			.To<CommandTest>();
+
+		// Act
+		commandContainer.Unbind(LifeTime.Local);
+		var actual = commandContainer.Bind<SignalTest>();
+
+		//Assert
+		Assert.AreEqual(expected, actual);
+	}
+
+	#endregion
 	#region Nested
 
 	internal sealed class SignalTest : SignalEx

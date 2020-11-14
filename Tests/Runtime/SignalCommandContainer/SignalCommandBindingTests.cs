@@ -56,6 +56,93 @@ internal sealed class SignalCommandBindingTests
 	#region Composite
 
 	[Test]
+	public void SignalCommandBinding_InGlobal()
+	{
+		// Arrange
+		var expected = LifeTime.Global;
+		var container = new CommandContainerTest();
+		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+
+		// Act
+		binder.InGlobal();
+		var actual = binder.LifeTime;
+
+		// Assert
+		Assert.AreEqual(expected, actual);
+	}
+
+	[Test]
+	public void SignalCommandBinding_InGlobal_Exeption()
+	{
+		// Arrange
+		var actual = false;
+		var container = new CommandContainerTest();
+		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+
+		// Act
+		binder.InGlobal();
+
+		try
+		{
+			binder.InGlobal();
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	[Test]
+	public void SignalCommandBinding_InLocal()
+	{
+		// Arrange
+		var expected = LifeTime.Local;
+		var container = new CommandContainerTest();
+		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+
+		// Act
+		binder.InLocal();
+		var actual = binder.LifeTime;
+
+		// Assert
+		Assert.AreEqual(expected, actual);
+	}
+
+	[Test]
+	public void SignalCommandBinding_InLocal_Exeption()
+	{
+		// Arrange
+		var actual = false;
+		var container = new CommandContainerTest();
+		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+
+		// Act
+		binder.InLocal();
+
+		try
+		{
+			binder.InLocal();
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	#endregion
+	#region Composite
+
+	[Test]
 	public void SignalCommandBinding_InSequence()
 	{
 		// Arrange
@@ -75,6 +162,29 @@ internal sealed class SignalCommandBindingTests
 
 	[Test]
 	public void SignalCommandBinding_InSequence_Exeption()
+	{
+		// Arrange
+		var actual = false;
+		var container = new CommandContainerTest();
+		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+
+		// Act
+		try
+		{
+			binder.InSequence();
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	[Test]
+	public void SignalCommandBinding_InSequence_InSequence_Exeption()
 	{
 		// Arrange
 		var actual = false;
@@ -119,6 +229,29 @@ internal sealed class SignalCommandBindingTests
 
 	[Test]
 	public void SignalCommandBinding_InParallel_Exeption()
+	{
+		// Arrange
+		var actual = false;
+		var container = new CommandContainerTest();
+		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+
+		// Act
+		try
+		{
+			binder.InParallel();
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	[Test]
+	public void SignalCommandBinding_InParallel_InParallel_Exeption()
 	{
 		// Arrange
 		var actual = false;

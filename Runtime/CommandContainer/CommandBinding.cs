@@ -6,15 +6,40 @@ namespace EM.IoC
 	public class CommandBinding :
 		Binding,
 		ICommandBinding,
-		ICommandBindingComposite
+		ICommandBindingComposite,
+		ICommandBindingLifeTime
 	{
+		#region ICommandBindingLifeTime
+
+		public LifeTime LifeTime => lifeTime;
+
+		public ICommandBindingComposite InGlobal()
+		{
+			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InGlobal));
+
+			lifeTime = LifeTime.Global;
+
+			return this;
+		}
+
+		public ICommandBindingComposite InScene()
+		{
+			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InScene));
+
+			lifeTime = LifeTime.Scene;
+
+			return this;
+		}
+
+		#endregion
 		#region ICommandBindingComposite
 
 		public bool? IsSequence => isSequence;
 
 		public ICommandBinding InParallel()
 		{
-			Requires.IsNull(isSequence, nameof(isSequence));
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(InParallel));
+			Requires.IsValidOperation(isSequence == null, this, nameof(InParallel));
 
 			isSequence = false;
 
@@ -23,7 +48,8 @@ namespace EM.IoC
 
 		public ICommandBinding InSequence()
 		{
-			Requires.IsNull(isSequence, nameof(isSequence));
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(InSequence));
+			Requires.IsValidOperation(isSequence == null, this, nameof(InSequence));
 
 			isSequence = true;
 
@@ -36,13 +62,17 @@ namespace EM.IoC
 		public new ICommandBinding To<T>()
 			where T : ICommand
 		{
-			Requires.IsNotNull(isSequence, nameof(isSequence));
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(To));
+			Requires.IsValidOperation(isSequence != null, this, nameof(isSequence));
 
 			return base.To<T>() as ICommandBinding;
 		}
 
 		public void Execute(object data = null)
 		{
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(Execute));
+			Requires.IsValidOperation(isSequence != null, this, nameof(isSequence));
+
 			container.ReactTo(Key, data);
 		}
 
@@ -52,6 +82,8 @@ namespace EM.IoC
 		private readonly ICommandContainer container;
 
 		private bool? isSequence = null;
+
+		private LifeTime lifeTime = LifeTime.External;
 
 		public CommandBinding(
 			ICommandContainer container,

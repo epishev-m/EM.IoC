@@ -62,9 +62,10 @@ internal sealed class CommandBindingTests
 		var expected = true;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
+		binder.InGlobal();
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
 		binder.InSequence();
 		var actual = binder.IsSequence;
 
@@ -79,16 +80,15 @@ internal sealed class CommandBindingTests
 		var actual = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
+		binder.InGlobal().InSequence();
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-		binder.InSequence();
-
 		try
 		{
 			binder.InSequence();
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -104,10 +104,10 @@ internal sealed class CommandBindingTests
 		var expected = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
+		binder.InGlobal().InParallel();
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-		binder.InParallel();
 		var actual = binder.IsSequence;
 
 		// Assert
@@ -121,16 +121,15 @@ internal sealed class CommandBindingTests
 		var actual = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
+		binder.InGlobal().InParallel();
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-		binder.InParallel();
-
 		try
 		{
 			binder.InParallel();
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -149,15 +148,15 @@ internal sealed class CommandBindingTests
 		var actual = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
+		binder.InGlobal();
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-
 		try
 		{
 			binder.To<CommandTest>();
 		}
-		catch (ArgumentNullException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -173,10 +172,11 @@ internal sealed class CommandBindingTests
 		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-		binder.InParallel()
+		binder.InGlobal()
+			.InParallel()
 			.To<CommandTest>()
 			.To<CommandTest>();
 		var values = binder.Values;
@@ -193,10 +193,11 @@ internal sealed class CommandBindingTests
 		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-		binder.InSequence()
+		binder.InGlobal()
+			.InSequence()
 			.To<CommandTest>()
 			.To<CommandTest>();
 		var values = binder.Values;
@@ -215,10 +216,11 @@ internal sealed class CommandBindingTests
 		// Arrange
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-		binder.InSequence()
+		binder.InGlobal()
+			.InSequence()
 			.To<CommandTest>()
 			.Execute();
 
@@ -234,10 +236,11 @@ internal sealed class CommandBindingTests
 		// Arrange
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new CommandBinding(container, key, null, null);
 
 		// Act
-		var binder = new CommandBinding(container, key, null, null);
-		binder.InParallel()
+		binder.InGlobal()
+			.InParallel()
 			.To<CommandTest>()
 			.Execute();
 
@@ -254,12 +257,12 @@ internal sealed class CommandBindingTests
 	{
 		#region ICommandContainer
 
-		public ICommandBindingComposite Bind<T>()
+		public ICommandBindingLifeTime Bind<T>()
 		{
 			throw new NotImplementedException();
 		}
 
-		public ICommandBindingComposite Bind(object key)
+		public ICommandBindingLifeTime Bind(object key)
 		{
 			throw new NotImplementedException();
 		}
@@ -280,6 +283,16 @@ internal sealed class CommandBindingTests
 		}
 
 		public bool Unbind(object key)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnbindAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Unbind(LifeTime lifeTime)
 		{
 			throw new NotImplementedException();
 		}

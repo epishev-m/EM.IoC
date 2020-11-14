@@ -136,7 +136,7 @@ internal sealed class InstanceProviderActivatorTests
 	internal sealed class DIContainer :
 		IDIContainer
 	{
-		public IDIBinding Bind<T>()
+		public IDIBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -163,6 +163,16 @@ internal sealed class InstanceProviderActivatorTests
 
 		public bool Unbind<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnbindAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Unbind(LifeTime lifeTime)
 		{
 			throw new NotImplementedException();
 		}

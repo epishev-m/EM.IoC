@@ -10,14 +10,19 @@ namespace EM.IoC
 			object trigger,
 			object data = null);
 
-		ICommandBindingComposite Bind<T>();
+		ICommandBindingLifeTime Bind<T>();
 
-		ICommandBindingComposite Bind(
+		ICommandBindingLifeTime Bind(
 			object key);
 
 		bool Unbind<T>();
 
 		bool Unbind(
 			object key);
+
+		void UnbindAll();
+
+		void Unbind(
+			LifeTime lifeTime);
 	}
 }

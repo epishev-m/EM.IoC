@@ -11,15 +11,15 @@ namespace EM.IoC
 	{
 		#region ICommandContainer
 
-		public ICommandBindingComposite Bind<T>()
+		public ICommandBindingLifeTime Bind<T>()
 		{
-			return base.Bind<T>() as ICommandBindingComposite;
+			return base.Bind<T>() as ICommandBindingLifeTime;
 		}
 
-		public ICommandBindingComposite Bind(
+		public ICommandBindingLifeTime Bind(
 			object key)
 		{
-			return base.Bind(key) as ICommandBindingComposite;
+			return base.Bind(key) as ICommandBindingLifeTime;
 		}
 
 		public void ReactTo<T>(
@@ -58,6 +58,18 @@ namespace EM.IoC
 			object key)
 		{
 			return base.Unbind(key);
+		}
+
+		public void Unbind(
+			LifeTime lifeTime)
+		{
+			Unbind(binding =>
+			{
+				var diBinding = binding as CommandBinding;
+				var result = diBinding.LifeTime == lifeTime;
+
+				return result;
+			});
 		}
 
 		#endregion

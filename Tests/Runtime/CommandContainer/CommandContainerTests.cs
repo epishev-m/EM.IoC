@@ -95,14 +95,16 @@ internal sealed class CommandContainerTests
 		var container = new DIContainer();
 		var commandContainer = new CommandContainer(container);
 		var key = typeof(CommandTest);
+
 		CommandTest.Collback = () => actual++;
 
-		// Act
 		commandContainer.Bind(key)
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>()
 			.To<CommandTest>();
 
+		// Act
 		commandContainer.ReactTo(key);
 
 		//Assert
@@ -119,11 +121,12 @@ internal sealed class CommandContainerTests
 		var key = typeof(CommandTest);
 		CommandTest.Collback = () => { };
 
-		// Act
 		commandContainer.Bind(key)
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>();
 
+		// Act
 		commandContainer.ReactTo(key, expected);
 		var actual = CommandTest.DataTest;
 
@@ -139,14 +142,16 @@ internal sealed class CommandContainerTests
 		var expected = 2;
 		var container = new DIContainer();
 		var commandContainer = new CommandContainer(container);
+
 		CommandTest.Collback = () => actual++;
 
-		// Act
 		commandContainer.Bind<CommandTest>()
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>()
 			.To<CommandTest>();
 
+		// Act
 		commandContainer.ReactTo<CommandTest>();
 
 		//Assert
@@ -160,13 +165,15 @@ internal sealed class CommandContainerTests
 		var expected = new Test();
 		var container = new DIContainer();
 		var commandContainer = new CommandContainer(container);
+
 		CommandTest.Collback = () => { };
 
-		// Act
 		commandContainer.Bind<CommandTest>()
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>();
 
+		// Act
 		commandContainer.ReactTo<CommandTest>(expected);
 		var actual = CommandTest.DataTest;
 
@@ -196,12 +203,14 @@ internal sealed class CommandContainerTests
 	{
 		// Arrange
 		var container = new DIContainer();
-
-		// Act
 		var commandContainer = new CommandContainer(container);
+
 		commandContainer.Bind<CommandTest>()
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>();
+
+		// Act
 		var actual = commandContainer.Unbind<CommandTest>();
 
 		//Assert
@@ -250,7 +259,7 @@ internal sealed class CommandContainerTests
 	internal sealed class DIContainer :
 		IDIContainer
 	{
-		public IDIBinding Bind<T>()
+		public IDIBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -270,6 +279,16 @@ internal sealed class CommandContainerTests
 
 		public bool Unbind<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnbindAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Unbind(LifeTime lifeTime)
 		{
 			throw new NotImplementedException();
 		}

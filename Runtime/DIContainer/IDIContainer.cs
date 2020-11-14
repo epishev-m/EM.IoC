@@ -11,10 +11,14 @@ namespace EM.IoC
 		T GetInstance<T>()
 			where T : class;
 
-		IDIBinding Bind<T>()
+		IDIBindingLifeTime Bind<T>()
 			where T : class;
 
 		bool Unbind<T>()
 			where T : class;
+
+		void Unbind(LifeTime lifeTime);
+
+		void UnbindAll();
 	}
 }

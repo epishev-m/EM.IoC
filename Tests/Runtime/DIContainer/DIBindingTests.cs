@@ -92,6 +92,7 @@ internal sealed class DIBindingTests
 		var container = new DIContainer();
 		var key = typeof(Test);
 		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal();
 
 		// Act
 		try
@@ -117,11 +118,11 @@ internal sealed class DIBindingTests
 		var container = new DIContainer();
 		var key = typeof(Test);
 		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal().To(instance);
 
 		// Act
 		try
 		{
-			binding.To(instance);
 			binding.To(instance);
 		}
 		catch (ArgumentException)
@@ -143,6 +144,7 @@ internal sealed class DIBindingTests
 		var container = new DIContainer();
 		var key = typeof(Test);
 		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal();
 
 		// Act
 		try
@@ -170,7 +172,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.To(instance);
+		binding.InGlobal().To(instance);
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider.GetType();
 
@@ -190,7 +192,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, Resolver);
 
 		// Act
-		binding.To(instance);
+		binding.InGlobal().To(instance);
 
 		void Resolver(IBinding unused) => actual = true;
 
@@ -207,11 +209,11 @@ internal sealed class DIBindingTests
 		var container = new DIContainer();
 		var key = typeof(Test);
 		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal().To<Test>();
 
 		// Act
 		try
 		{
-			binding.To<Test>();
 			binding.To<Test>();
 		}
 		catch (ArgumentException)
@@ -234,7 +236,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.To<Test>();
+		binding.InGlobal().To<Test>();
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider.GetType();
 
@@ -253,7 +255,7 @@ internal sealed class DIBindingTests
 		var expected = binding;
 
 		// Act
-		var actual = binding.To<Test>();
+		var actual = binding.InGlobal().To<Test>();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -270,7 +272,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, Resolver);
 
 		// Act
-		binding.To<Test>();
+		binding.InGlobal().To<Test>();
 
 		void Resolver(IBinding unused) => actual = true;
 
@@ -291,6 +293,7 @@ internal sealed class DIBindingTests
 		var container = new DIContainer();
 		var key = typeof(TestFactory);
 		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal();
 
 		// Act
 		try
@@ -316,11 +319,11 @@ internal sealed class DIBindingTests
 		var container = new DIContainer();
 		var key = typeof(TestFactory);
 		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal().ToFactory(instance);
 
 		// Act
 		try
 		{
-			binding.ToFactory(instance);
 			binding.ToFactory(instance);
 		}
 		catch (ArgumentException)
@@ -344,7 +347,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.ToFactory(instance);
+		binding.InGlobal().ToFactory(instance);
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider.GetType();
 
@@ -364,7 +367,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, Resolver);
 
 		// Act
-		binding.ToFactory(instance);
+		binding.InGlobal().ToFactory(instance);
 
 		void Resolver(IBinding unused) => actual = true;
 
@@ -381,11 +384,11 @@ internal sealed class DIBindingTests
 		var container = new DIContainer();
 		var key = typeof(TestFactory);
 		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal().ToFactory<TestFactory>();
 
 		// Act
 		try
 		{
-			binding.ToFactory<TestFactory>();
 			binding.ToFactory<TestFactory>();
 		}
 		catch (ArgumentException)
@@ -408,7 +411,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.ToFactory<TestFactory>();
+		binding.InGlobal().ToFactory<TestFactory>();
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider.GetType();
 
@@ -427,7 +430,7 @@ internal sealed class DIBindingTests
 		var expected = binding;
 
 		// Act
-		var actual = binding.ToFactory<TestFactory>();
+		var actual = binding.InGlobal().ToFactory<TestFactory>();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -444,7 +447,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, Resolver);
 
 		// Act
-		binding.ToFactory<TestFactory>();
+		binding.InGlobal().ToFactory<TestFactory>();
 
 		void Resolver(IBinding unused) => actual = true;
 
@@ -463,7 +466,8 @@ internal sealed class DIBindingTests
 		var reflector = new Reflector();
 		var container = new DIContainer();
 		var key = typeof(Test);
-		IDIBindingSingleton binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal();
 
 		// Act
 		try
@@ -490,7 +494,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.To<Test>().ToSingleton();
+		binding.InGlobal().To<Test>().ToSingleton();
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider.GetType();
 
@@ -509,7 +513,7 @@ internal sealed class DIBindingTests
 		var binding = new DIBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.ToFactory<TestFactory>().ToSingleton();
+		binding.InGlobal().ToFactory<TestFactory>().ToSingleton();
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider.GetType();
 
@@ -575,7 +579,7 @@ internal sealed class DIBindingTests
 	internal sealed class DIContainer :
 		IDIContainer
 	{
-		public IDIBinding Bind<T>()
+		public IDIBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -602,6 +606,16 @@ internal sealed class DIBindingTests
 
 		public bool Unbind<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnbindAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Unbind(LifeTime lifeTime)
 		{
 			throw new NotImplementedException();
 		}

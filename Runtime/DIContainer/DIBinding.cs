@@ -6,20 +6,30 @@ namespace EM.IoC
 
 	public sealed class DIBinding :
 		Binding,
+		IDIBindingSingleton,
 		IDIBinding,
-		IDIBindingSingleton
+		IDIBindingLifeTime
 	{
-		#region IDIBindingSingleton
+		#region IDIBindingLifeTime
 
-		public void ToSingleton()
+		public LifeTime LifeTime => lifeTime;
+
+		public IDIBinding InGlobal()
 		{
-			Requires.IsNotNull(Values, nameof(Values));
+			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InGlobal));
 
-			var value = Values.First();
-			var instanceProvider = value as IInstanceProvider;
-			instanceProvider = new InstanceProviderSingleton(instanceProvider);
-			RemoveAllValues();
-			var unused = base.To(instanceProvider);
+			lifeTime = LifeTime.Global;
+
+			return this;
+		}
+
+		public IDIBinding InScene()
+		{
+			Requires.IsValidOperation(lifeTime == LifeTime.External, this, nameof(InScene));
+
+			lifeTime = LifeTime.Global;
+
+			return this;
 		}
 
 		#endregion
@@ -28,6 +38,7 @@ namespace EM.IoC
 		public new IDIBindingSingleton To<T>()
 			where T : class
 		{
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(To));
 			Requires.IsNull(Values, nameof(Values));
 
 			var instanceProvider = new InstanceProviderActivator(
@@ -35,25 +46,26 @@ namespace EM.IoC
 				reflector,
 				container);
 
-			var unused = base.To(instanceProvider);
-
-			return this;
+			return base.To(instanceProvider) as IDIBindingSingleton;
 		}
 
 		public new void To(
 			object instance)
 		{
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(To));
 			Requires.IsNull(Values, nameof(Values));
 			Requires.IsNotNull(instance, nameof(instance));
 			Requires.IsReferenceType(instance.GetType(), nameof(instance));
 
 			var instanceProvider = new InstanceProvider(instance);
+
 			var unused = base.To(instanceProvider);
 		}
 
 		public IDIBindingSingleton ToFactory<T>()
 			where T : class, IFactory
 		{
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(ToFactory));
 			Requires.IsNull(Values, nameof(Values));
 
 			var instanceProvider = new InstanceProviderFactory(
@@ -70,6 +82,7 @@ namespace EM.IoC
 		public IDIBindingSingleton ToFactory(
 			IFactory factory)
 		{
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(ToFactory));
 			Requires.IsNull(Values, nameof(Values));
 			Requires.IsNotNull(factory, nameof(factory));
 
@@ -83,11 +96,29 @@ namespace EM.IoC
 		}
 
 		#endregion
+		#region IDIBindingSingleton
+
+		public void ToSingleton()
+		{
+			Requires.IsValidOperation(lifeTime != LifeTime.External, this, nameof(ToFactory));
+			Requires.IsNotNull(Values, nameof(Values));
+
+			var value = Values.First();
+			var instanceProvider = value as IInstanceProvider;
+			instanceProvider = new InstanceProviderSingleton(instanceProvider);
+			RemoveAllValues();
+
+			var unused = base.To(instanceProvider);
+		}
+
+		#endregion
 		#region DIBinding
 
 		private readonly IReflector reflector;
 
 		private readonly IDIContainer container;
+
+		private LifeTime lifeTime = LifeTime.External;
 
 		public DIBinding(
 			IReflector reflector,

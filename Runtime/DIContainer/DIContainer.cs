@@ -11,10 +11,10 @@ namespace EM.IoC
 	{
 		#region IDIContainer
 
-		public IDIBinding Bind<T>()
+		public IDIBindingLifeTime Bind<T>()
 			where T : class
 		{
-			return base.Bind<T>() as IDIBinding;
+			return base.Bind<T>() as IDIBindingLifeTime;
 		}
 
 		public object GetInstance(
@@ -47,6 +47,17 @@ namespace EM.IoC
 			where T : class
 		{
 			return base.Unbind<T>();
+		}
+
+		public void Unbind(LifeTime lifeTime)
+		{
+			Unbind(binding =>
+			{
+				var diBinding = binding as DIBinding;
+				var result = diBinding.LifeTime == lifeTime;
+
+				return result;
+			});
 		}
 
 		#endregion

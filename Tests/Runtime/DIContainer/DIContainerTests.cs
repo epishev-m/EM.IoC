@@ -34,9 +34,9 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
+		var container = new DIContainer(reflector);
 
 		// Act
-		var container = new DIContainer(reflector);
 		var actual = container.Bind<Test>();
 
 		//Assert
@@ -67,7 +67,10 @@ internal sealed class DIContainerTests
 		// Arrange
 		var reflector = new Reflector();
 		var container = new DIContainer(reflector);
-		container.Bind<Test>().To<Test>();
+
+		container.Bind<Test>()
+			.InGlobal()
+			.To<Test>();
 
 		// Act
 		var instance = container.GetInstance<Test>();
@@ -84,7 +87,10 @@ internal sealed class DIContainerTests
 		var reflector = new Reflector();
 		var type = default(Type);
 		var container = new DIContainer(reflector);
-		container.Bind<Test>().To<Test>();
+		
+		container.Bind<Test>()
+			.InGlobal()
+			.To<Test>();
 
 		// Act
 		try
@@ -108,9 +114,9 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
+		var container = new DIContainer(reflector);
 
 		// Act
-		var container = new DIContainer(reflector);
 		var actual = container.Unbind<string>();
 
 		//Assert
@@ -122,10 +128,13 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
+		var container = new DIContainer(reflector);
+
+		container.Bind<Test>()
+			.InGlobal()
+			.To<Test>();
 
 		// Act
-		var container = new DIContainer(reflector);
-		var binding = container.Bind<Test>().To<Test>();
 		var actual = container.Unbind<Test>();
 
 		//Assert
@@ -137,10 +146,13 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
+		var container = new DIContainer(reflector);
+
+		container.Bind<Test>()
+			.InGlobal()
+			.To<Test>();
 
 		// Act
-		var container = new DIContainer(reflector);
-		var binding = container.Bind<Test>().To<Test>();
 		var unused = container.Unbind<Test>();
 		var actual = container.GetInstance<Test>();
 
@@ -154,12 +166,12 @@ internal sealed class DIContainerTests
 	internal sealed class Test
 	{
 		public Test(
-			A param)
+			TestParam param)
 		{
 		}
 	}
 
-	internal sealed class A
+	internal sealed class TestParam
 	{
 	}
 
@@ -183,7 +195,7 @@ internal sealed class DIContainerTests
 			var constructorInfo = constructors[0];
 			var types = new List<Type>()
 			{
-				typeof(A)
+				typeof(TestParam)
 			};
 
 			return new ReflectionInfo(constructorInfo, types);

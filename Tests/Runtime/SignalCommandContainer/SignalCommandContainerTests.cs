@@ -41,6 +41,28 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	[Test]
+	public void SignalCommandContainer_Bind_Exeption()
+	{
+		// Arrange
+		var actual = false;
+		var container = new DIContainer();
+		var signalCommandContainer = new SignalCommandContainer(container);
+
+		// Act
+		try
+		{
+			var unused = signalCommandContainer.Bind<SignalFaceTest>();
+		}
+		catch (ArgumentNullException)
+		{
+			actual = true;
+		}
+
+		//Assert
+		Assert.IsNotNull(actual);
+	}
+
+	[Test]
 	public void SignalCommandContainer_ReactTo()
 	{
 		// Arrange
@@ -52,6 +74,7 @@ internal sealed class SignalCommandContainerTests
 
 		// Act
 		commandContainer.Bind<SignalTest>()
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>()
 			.To<CommandTest>()
@@ -72,6 +95,7 @@ internal sealed class SignalCommandContainerTests
 
 		// Act
 		commandContainer.Bind<SignalTest>()
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>()
 			.Execute(expected);
@@ -101,13 +125,14 @@ internal sealed class SignalCommandContainerTests
 	{
 		// Arrange
 		var container = new DIContainer();
-
-		// Act
 		var commandContainer = new SignalCommandContainer(container);
+
 		commandContainer.Bind<SignalTest>()
+			.InGlobal()
 			.InParallel()
 			.To<CommandTest>();
 
+		// Act
 		var actual = commandContainer.Unbind<SignalTest>();
 
 		//Assert
@@ -117,6 +142,10 @@ internal sealed class SignalCommandContainerTests
 	#region Nested
 
 	internal sealed class SignalTest : SignalEx
+	{
+	}
+
+	internal sealed class SignalFaceTest : SignalEx
 	{
 	}
 
@@ -161,7 +190,7 @@ internal sealed class SignalCommandContainerTests
 	{
 		private readonly ISignal signal = new SignalTest();
 
-		public IDIBinding Bind<T>()
+		public IDIBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -181,6 +210,16 @@ internal sealed class SignalCommandContainerTests
 
 		public bool Unbind<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnbindAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Unbind(LifeTime lifeTime)
 		{
 			throw new NotImplementedException();
 		}

@@ -62,9 +62,10 @@ internal sealed class SignalCommandBindingTests
 		var expected = true;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+		binder.InGlobal();
 
 		// Act
-		var binder = new SignalCommandBinding(container, key, null, null);
 		binder.InSequence();
 		var actual = binder.IsSequence;
 
@@ -79,16 +80,17 @@ internal sealed class SignalCommandBindingTests
 		var actual = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+		binder.InGlobal();
 
 		// Act
-		var binder = new SignalCommandBinding(container, key, null, null);
 		binder.InSequence();
 
 		try
 		{
 			binder.InSequence();
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -104,9 +106,10 @@ internal sealed class SignalCommandBindingTests
 		var expected = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+		binder.InGlobal();
 
 		// Act
-		var binder = new SignalCommandBinding(container, key, null, null);
 		binder.InParallel();
 		var actual = binder.IsSequence;
 
@@ -121,16 +124,17 @@ internal sealed class SignalCommandBindingTests
 		var actual = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
+		binder.InGlobal();
 
 		// Act
-		var binder = new SignalCommandBinding(container, key, null, null);
 		binder.InParallel();
 
 		try
 		{
 			binder.InParallel();
 		}
-		catch (ArgumentException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -172,12 +176,13 @@ internal sealed class SignalCommandBindingTests
 
 		// Act
 		var binder = new SignalCommandBinding(container, key, null, null);
+		binder.InGlobal();
 
 		try
 		{
 			binder.To<CommandTest>();
 		}
-		catch (ArgumentNullException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -193,12 +198,14 @@ internal sealed class SignalCommandBindingTests
 		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
-
-		// Act
 		var binder = new SignalCommandBinding(container, key, null, null);
-		binder.InParallel()
+
+		binder.InGlobal()
+			.InParallel()
 			.To<CommandTest>()
 			.To<CommandTest>();
+
+		// Act
 		var values = binder.Values;
 		var actual = values.Count();
 
@@ -213,12 +220,14 @@ internal sealed class SignalCommandBindingTests
 		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
-
-		// Act
 		var binder = new SignalCommandBinding(container, key, null, null);
-		binder.InSequence()
+
+		binder.InGlobal()
+			.InSequence()
 			.To<CommandTest>()
 			.To<CommandTest>();
+
+		// Act
 		var values = binder.Values;
 		var actual = values.Count();
 
@@ -235,10 +244,11 @@ internal sealed class SignalCommandBindingTests
 		// Arrange
 		var container = new CommandContainerTest();
 		var key = typeof(object);
+		var binder = new SignalCommandBinding(container, key, null, null);
 
 		// Act
-		var binder = new SignalCommandBinding(container, key, null, null);
-		binder.InSequence()
+		binder.InGlobal()
+			.InSequence()
 			.To<CommandTest>()
 			.Execute();
 
@@ -257,7 +267,8 @@ internal sealed class SignalCommandBindingTests
 
 		// Act
 		var binder = new SignalCommandBinding(container, key, null, null);
-		binder.InParallel()
+		binder.InGlobal()
+			.InParallel()
 			.To<CommandTest>()
 			.Execute();
 
@@ -274,12 +285,14 @@ internal sealed class SignalCommandBindingTests
 	{
 		#region ISignalCommandContainer
 
-		ISignalCommandBindingComposite ISignalCommandContainer.Bind<T>()
+		public ISignalCommandBindingLifeTime Bind<T>()
+			where T : class, ISignal
 		{
 			throw new NotImplementedException();
 		}
 
-		bool ISignalCommandContainer.Unbind<T>()
+		public bool Unbind<T>()
+			where T : class, ISignal
 		{
 			throw new NotImplementedException();
 		}
@@ -287,12 +300,12 @@ internal sealed class SignalCommandBindingTests
 		#endregion
 		#region ICommandContainer
 
-		public ICommandBindingComposite Bind<T>()
+		ICommandBindingLifeTime ICommandContainer.Bind<T>()
 		{
 			throw new NotImplementedException();
 		}
 
-		public ICommandBindingComposite Bind(object key)
+		ICommandBindingLifeTime ICommandContainer.Bind(object key)
 		{
 			throw new NotImplementedException();
 		}
@@ -307,12 +320,22 @@ internal sealed class SignalCommandBindingTests
 			isExecuted = true;
 		}
 
-		public bool Unbind<T>()
+		bool ICommandContainer.Unbind<T>()
 		{
 			throw new NotImplementedException();
 		}
 
 		public bool Unbind(object key)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void UnbindAll()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Unbind(LifeTime lifeTime)
 		{
 			throw new NotImplementedException();
 		}

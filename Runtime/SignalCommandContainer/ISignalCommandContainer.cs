@@ -5,10 +5,14 @@ namespace EM.IoC
 
 	public interface ISignalCommandContainer
 	{
-		ISignalCommandBindingComposite Bind<T>()
+		ISignalCommandBindingLifeTime Bind<T>()
 			where T : class, ISignal;
 
 		bool Unbind<T>()
 			where T : class, ISignal;
+
+		void Unbind(LifeTime lifeTime);
+
+		void UnbindAll();
 	}
 }

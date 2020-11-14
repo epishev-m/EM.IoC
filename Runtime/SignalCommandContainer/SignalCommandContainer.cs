@@ -9,12 +9,12 @@ namespace EM.IoC
 	{
 		#region ISignalCommandContainer
 
-		public new ISignalCommandBindingComposite Bind<T>()
+		public new ISignalCommandBindingLifeTime Bind<T>()
 			where T : class, ISignal 
 		{
 			var signal = container.GetInstance<T>();
 
-			return Bind(signal) as ISignalCommandBindingComposite;
+			return Bind(signal) as ISignalCommandBindingLifeTime;
 		}
 
 		public new bool Unbind<T>()

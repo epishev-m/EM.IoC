@@ -6,8 +6,22 @@ namespace EM.IoC
 	public sealed class SignalCommandBinding :
 		CommandBinding,
 		ISignalCommandBinding,
-		ISignalCommandBindingOnce
+		ISignalCommandBindingOnce,
+		ISignalCommandBindingLifeTime
 	{
+		#region ISignalCommandBindingLifeTime
+
+		public new ISignalCommandBindingComposite InGlobal()
+		{
+			return base.InGlobal() as ISignalCommandBindingComposite;
+		}
+
+		public new ISignalCommandBindingComposite InScene()
+		{
+			return base.InScene() as ISignalCommandBindingComposite;
+		}
+
+		#endregion
 		#region ISignalCommandBindingOnce
 
 		public bool IsOneOff => isOneOff;
@@ -19,9 +33,6 @@ namespace EM.IoC
 			return this;
 		}
 
-		#endregion
-		#region ISignalCommandBindingComposite
-
 		public new ISignalCommandBinding InParallel()
 		{
 			return base.InParallel() as ISignalCommandBinding;
@@ -31,6 +42,9 @@ namespace EM.IoC
 		{
 			return base.InSequence() as ISignalCommandBinding;
 		}
+
+		#endregion
+		#region ISignalCommandBinding
 
 		public new ISignalCommandBinding To<T>()
 			where T : ICommand

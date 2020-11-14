@@ -160,6 +160,63 @@ internal sealed class DIContainerTests
 		Assert.IsNull(actual);
 	}
 
+	[Test]
+	public void DIContainer_UnbindAll_GetInstance()
+	{
+		// Arrange
+		var reflector = new Reflector();
+		var container = new DIContainer(reflector);
+
+		container.Bind<Test>()
+			.InGlobal()
+			.To<Test>();
+
+		// Act
+		container.UnbindAll();
+		var actual = container.GetInstance<Test>();
+
+		//Assert
+		Assert.IsNull(actual);
+	}
+
+	[Test]
+	public void DIContainer_UnbindLifeTime_GetInstance_ReturnNull()
+	{
+		// Arrange
+		var reflector = new Reflector();
+		var container = new DIContainer(reflector);
+
+		container.Bind<Test>()
+			.InGlobal()
+			.To<Test>();
+
+		// Act
+		container.Unbind(LifeTime.Global);
+		var actual = container.GetInstance<Test>();
+
+		//Assert
+		Assert.IsNull(actual);
+	}
+
+	[Test]
+	public void DIContainer_UnbindLifeTime_GetInstance_ReturnNotNull()
+	{
+		// Arrange
+		var reflector = new Reflector();
+		var container = new DIContainer(reflector);
+
+		container.Bind<Test>()
+			.InLocal()
+			.To<Test>();
+
+		// Act
+		container.Unbind(LifeTime.Global);
+		var actual = container.GetInstance<Test>();
+
+		//Assert
+		Assert.IsNotNull(actual);
+	}
+
 	#endregion
 	#region Nested
 

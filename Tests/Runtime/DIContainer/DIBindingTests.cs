@@ -1,4 +1,4 @@
-using EM.Foundation;
+﻿using EM.Foundation;
 using EM.IoC;
 using NUnit.Framework;
 using System;
@@ -80,6 +80,96 @@ internal sealed class DIBindingTests
 	}
 
 	#endregion
+	#region LifeTime
+
+	[Test]
+	public void DIBinding_InGlobal()
+	{
+		// Arrange
+		var expected = LifeTime.Global;
+		var reflector = new Reflector();
+		var container = new DIContainer();
+		var key = typeof(Test);
+		var binding = new DIBinding(reflector, container, key, null, null);
+
+
+		// Act
+		binding.InGlobal();
+		var actual = binding.LifeTime;
+
+		// Assert
+		Assert.AreEqual(expected, actual);
+	}
+
+	[Test]
+	public void DIBinding_InGlobal_IsInvalidOperationException()
+	{
+		// Arrange
+		var actual = false;
+		var reflector = new Reflector();
+		var container = new DIContainer();
+		var key = typeof(Test);
+		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InGlobal();
+
+		// Act
+		try
+		{
+			binding.InGlobal();
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	[Test]
+	public void DIBinding_InLocal()
+	{
+		// Arrange
+		var expected = LifeTime.Local;
+		var reflector = new Reflector();
+		var container = new DIContainer();
+		var key = typeof(Test);
+		var binding = new DIBinding(reflector, container, key, null, null);
+
+		// Act
+		binding.InLocal();
+		var actual = binding.LifeTime;
+
+		// Assert
+		Assert.AreEqual(expected, actual);
+	}
+
+	[Test]
+	public void DIBinding_InLocal_IsInvalidOperationException()
+	{
+		// Arrange
+		var actual = false;
+		var reflector = new Reflector();
+		var container = new DIContainer();
+		var key = typeof(Test);
+		var binding = new DIBinding(reflector, container, key, null, null);
+		binding.InLocal();
+
+		// Act
+		try
+		{
+			binding.InLocal();
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	#endregion
 	#region To
 
 	[Test]
@@ -109,7 +199,32 @@ internal sealed class DIBindingTests
 	}
 
 	[Test]
-	public void DIBinding_To_IsNullException()
+	public void DIBinding_To_NotLifeTimeException()
+	{
+		// Arrange
+		var actual = false;
+		var instance = new Test(null);
+		var reflector = new Reflector();
+		var container = new DIContainer();
+		var key = typeof(Test);
+		var binding = new DIBinding(reflector, container, key, null, null);
+
+		// Act
+		try
+		{
+			binding.To(instance);
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	[Test]
+	public void DIBinding_To_ToException()
 	{
 		// Arrange
 		var actual = false;
@@ -201,7 +316,31 @@ internal sealed class DIBindingTests
 	}
 
 	[Test]
-	public void DIBinding_ToGeneric_IsNullException()
+	public void DIBinding_ToGeneric_NotLifeTimeException()
+	{
+		// Arrange
+		var actual = false;
+		var reflector = new Reflector();
+		var container = new DIContainer();
+		var key = typeof(Test);
+		var binding = new DIBinding(reflector, container, key, null, null);
+
+		// Act
+		try
+		{
+			binding.To<Test>();
+		}
+		catch (InvalidOperationException)
+		{
+			actual = true;
+		}
+
+		// Assert
+		Assert.IsTrue(actual);
+	}
+
+	[Test]
+	public void DIBinding_ToGeneric_ToGeneric_Exception()
 	{
 		// Arrange
 		var actual = false;

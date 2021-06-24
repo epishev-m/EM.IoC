@@ -13,13 +13,12 @@ internal sealed class SignalCommandBindingTests
 	{
 		// Arrange
 		var actual = false;
-		var container = default(ICommandContainer);
 		var key = typeof(object);
 
 		// Act
 		try
 		{
-			var unused = new SignalCommandBinding(container, key, null, null);
+			var unused = new SignalCommandBinding(null, key, null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -36,12 +35,11 @@ internal sealed class SignalCommandBindingTests
 		// Arrange
 		var actual = false;
 		var container = new CommandContainerTest();
-		var key = default(object);
 
 		// Act
 		try
 		{
-			var unused = new SignalCommandBinding(container, key, null, null);
+			var unused = new SignalCommandBinding(container, null, null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -59,7 +57,6 @@ internal sealed class SignalCommandBindingTests
 	public void SignalCommandBinding_InGlobal()
 	{
 		// Arrange
-		var expected = LifeTime.Global;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new SignalCommandBinding(container, key, null, null);
@@ -69,7 +66,7 @@ internal sealed class SignalCommandBindingTests
 		var actual = binder.LifeTime;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(LifeTime.Global, actual);
 	}
 
 	[Test]
@@ -101,7 +98,6 @@ internal sealed class SignalCommandBindingTests
 	public void SignalCommandBinding_InLocal()
 	{
 		// Arrange
-		var expected = LifeTime.Local;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new SignalCommandBinding(container, key, null, null);
@@ -111,7 +107,7 @@ internal sealed class SignalCommandBindingTests
 		var actual = binder.LifeTime;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(LifeTime.Local, actual);
 	}
 
 	[Test]
@@ -146,7 +142,6 @@ internal sealed class SignalCommandBindingTests
 	public void SignalCommandBinding_InSequence()
 	{
 		// Arrange
-		var expected = true;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new SignalCommandBinding(container, key, null, null);
@@ -157,7 +152,7 @@ internal sealed class SignalCommandBindingTests
 		var actual = binder.IsSequence;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.IsTrue(actual);
 	}
 
 	[Test]
@@ -213,7 +208,6 @@ internal sealed class SignalCommandBindingTests
 	public void SignalCommandBinding_InParallel()
 	{
 		// Arrange
-		var expected = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new SignalCommandBinding(container, key, null, null);
@@ -224,7 +218,7 @@ internal sealed class SignalCommandBindingTests
 		var actual = binder.IsSequence;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.IsFalse(actual);
 	}
 
 	[Test]
@@ -283,7 +277,6 @@ internal sealed class SignalCommandBindingTests
 	public void SignalCommandBinding_Once()
 	{
 		// Arrange
-		var expected = true;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 
@@ -293,7 +286,7 @@ internal sealed class SignalCommandBindingTests
 		var actual = binder.IsOneOff;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.IsTrue(actual);
 	}
 
 	#endregion
@@ -328,7 +321,6 @@ internal sealed class SignalCommandBindingTests
 	public void SignalCommandBinding_InParallelAnd2To()
 	{
 		// Arrange
-		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new SignalCommandBinding(container, key, null, null);
@@ -343,14 +335,13 @@ internal sealed class SignalCommandBindingTests
 		var actual = values.Count();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	[Test]
 	public void SignalCommandBinding_InSequenceAnd2To()
 	{
 		// Arrange
-		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new SignalCommandBinding(container, key, null, null);
@@ -365,7 +356,7 @@ internal sealed class SignalCommandBindingTests
 		var actual = values.Count();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	#endregion
@@ -414,7 +405,9 @@ internal sealed class SignalCommandBindingTests
 	#endregion
 	#region Nested
 
-	internal sealed class CommandContainerTest : ICommandContainer, ISignalCommandContainer
+	private sealed class CommandContainerTest :
+		ICommandContainer,
+		ISignalCommandContainer
 	{
 		#region ISignalCommandContainer
 
@@ -450,7 +443,7 @@ internal sealed class SignalCommandBindingTests
 
 		public void ReactTo(object trigger, object data = null)
 		{
-			isExecuted = true;
+			IsExecuted = true;
 		}
 
 		bool ICommandContainer.Unbind<T>()
@@ -476,14 +469,13 @@ internal sealed class SignalCommandBindingTests
 		#endregion
 		#region CommandContainerTest
 
-		private bool isExecuted = false;
-
-		public bool IsExecuted => isExecuted;
+		public bool IsExecuted { get; private set; }
 
 		#endregion
 	}
 
-	internal sealed class CommandTest : ICommand
+	private sealed class CommandTest :
+		ICommand
 	{
 		public object Data
 		{
@@ -503,7 +495,7 @@ internal sealed class SignalCommandBindingTests
 
 		public void Execute()
 		{
-			Done.Invoke();
+			Done?.Invoke();
 		}
 	}
 

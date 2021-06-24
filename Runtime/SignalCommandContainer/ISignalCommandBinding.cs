@@ -1,14 +1,14 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	using EM.Foundation;
+using Foundation;
 
-	public interface ISignalCommandBinding
-	{
-		ISignalCommandBinding To<T>()
-			where T : ICommand;
+public interface ISignalCommandBinding
+{
+	ISignalCommandBinding To<T>()
+		where T : ICommand;
 
-		void Execute(
-			object data = null);
-	}
+	void Execute(
+		object data = null);
+}
+
 }

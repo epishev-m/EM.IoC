@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-internal sealed class DIBindingTests
+internal sealed class DiBindingTests
 {
 	#region Constructor
 
@@ -15,14 +15,13 @@ internal sealed class DIBindingTests
 	{
 		// Arrange
 		var actual = false;
-		var reflector = default(Reflector);
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
 
 		// Act
 		try
 		{
-			var unused = new DIBinding(reflector, container, key, null, null);
+			var unused = new DiBinding(null, container, key, null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -39,13 +38,12 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = default(DIContainer);
 		var key = typeof(Test);
 
 		// Act
 		try
 		{
-			var unused = new DIBinding(reflector, container, key, null, null);
+			var unused = new DiBinding(reflector, null, key, null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -62,13 +60,12 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
-		var key = default(Type);
+		var container = new DiContainer();
 
 		// Act
 		try
 		{
-			var unused = new DIBinding(reflector, container, key, null, null);
+			var unused = new DiBinding(reflector, container, null, null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -86,11 +83,10 @@ internal sealed class DIBindingTests
 	public void DIBinding_InGlobal()
 	{
 		// Arrange
-		var expected = LifeTime.Global;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 
 		// Act
@@ -98,7 +94,7 @@ internal sealed class DIBindingTests
 		var actual = binding.LifeTime;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(LifeTime.Global, actual);
 	}
 
 	[Test]
@@ -107,9 +103,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal();
 
 		// Act
@@ -130,18 +126,17 @@ internal sealed class DIBindingTests
 	public void DIBinding_InLocal()
 	{
 		// Arrange
-		var expected = LifeTime.Local;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		binding.InLocal();
 		var actual = binding.LifeTime;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(LifeTime.Local, actual);
 	}
 
 	[Test]
@@ -150,9 +145,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InLocal();
 
 		// Act
@@ -177,17 +172,16 @@ internal sealed class DIBindingTests
 	{
 		// Arrange
 		var actual = false;
-		var instance = default(Test);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal();
 
 		// Act
 		try
 		{
-			binding.To(instance);
+			binding.To(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -205,9 +199,9 @@ internal sealed class DIBindingTests
 		var actual = false;
 		var instance = new Test(null);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		try
@@ -230,9 +224,9 @@ internal sealed class DIBindingTests
 		var actual = false;
 		var instance = new Test(null);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal().To(instance);
 
 		// Act
@@ -256,9 +250,9 @@ internal sealed class DIBindingTests
 		var actual = false;
 		var instance = new TestStruct();
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal();
 
 		// Act
@@ -282,14 +276,14 @@ internal sealed class DIBindingTests
 		var expected = typeof(InstanceProvider);
 		var instance = new Test(null);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		binding.InGlobal().To(instance);
 		var provider = binding.Values.FirstOrDefault();
-		var actual = provider.GetType();
+		var actual = provider?.GetType();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -302,9 +296,9 @@ internal sealed class DIBindingTests
 		var actual = false;
 		var instance = new Test(null);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, Resolver);
+		var binding = new DiBinding(reflector, container, key, null, Resolver);
 
 		// Act
 		binding.InGlobal().To(instance);
@@ -321,9 +315,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		try
@@ -345,9 +339,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal().To<Test>();
 
 		// Act
@@ -370,14 +364,14 @@ internal sealed class DIBindingTests
 		// Arrange
 		var expected = typeof(InstanceProviderActivator);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		binding.InGlobal().To<Test>();
 		var provider = binding.Values.FirstOrDefault();
-		var actual = provider.GetType();
+		var actual = provider?.GetType();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -388,16 +382,15 @@ internal sealed class DIBindingTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
-		var expected = binding;
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		var actual = binding.InGlobal().To<Test>();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(binding, actual);
 	}
 
 	[Test]
@@ -406,9 +399,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, Resolver);
+		var binding = new DiBinding(reflector, container, key, null, Resolver);
 
 		// Act
 		binding.InGlobal().To<Test>();
@@ -427,17 +420,16 @@ internal sealed class DIBindingTests
 	{
 		// Arrange
 		var actual = false;
-		var instance = default(TestFactory);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal();
 
 		// Act
 		try
 		{
-			binding.ToFactory(instance);
+			binding.ToFactory(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -455,9 +447,9 @@ internal sealed class DIBindingTests
 		var actual = false;
 		var instance = new TestFactory();
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal().ToFactory(instance);
 
 		// Act
@@ -481,14 +473,14 @@ internal sealed class DIBindingTests
 		var expected = typeof(InstanceProviderFactory);
 		var instance = new TestFactory();
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		binding.InGlobal().ToFactory(instance);
 		var provider = binding.Values.FirstOrDefault();
-		var actual = provider.GetType();
+		var actual = provider?.GetType();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -501,9 +493,9 @@ internal sealed class DIBindingTests
 		var actual = false;
 		var instance = new TestFactory();
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, Resolver);
+		var binding = new DiBinding(reflector, container, key, null, Resolver);
 
 		// Act
 		binding.InGlobal().ToFactory(instance);
@@ -520,9 +512,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal().ToFactory<TestFactory>();
 
 		// Act
@@ -545,14 +537,14 @@ internal sealed class DIBindingTests
 		// Arrange
 		var expected = typeof(InstanceProviderFactory);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		binding.InGlobal().ToFactory<TestFactory>();
 		var provider = binding.Values.FirstOrDefault();
-		var actual = provider.GetType();
+		var actual = provider?.GetType();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -563,16 +555,15 @@ internal sealed class DIBindingTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, null);
-		var expected = binding;
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		var actual = binding.InGlobal().ToFactory<TestFactory>();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(binding, actual);
 	}
 
 	[Test]
@@ -581,9 +572,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, Resolver);
+		var binding = new DiBinding(reflector, container, key, null, Resolver);
 
 		// Act
 		binding.InGlobal().ToFactory<TestFactory>();
@@ -603,9 +594,9 @@ internal sealed class DIBindingTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 		binding.InGlobal();
 
 		// Act
@@ -628,14 +619,14 @@ internal sealed class DIBindingTests
 		// Arrange
 		var expected = typeof(InstanceProviderSingleton);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(Test);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		binding.InGlobal().To<Test>().ToSingleton();
 		var provider = binding.Values.FirstOrDefault();
-		var actual = provider.GetType();
+		var actual = provider?.GetType();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -647,14 +638,14 @@ internal sealed class DIBindingTests
 		// Arrange
 		var expected = typeof(InstanceProviderSingleton);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var key = typeof(TestFactory);
-		var binding = new DIBinding(reflector, container, key, null, null);
+		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
 		binding.InGlobal().ToFactory<TestFactory>().ToSingleton();
 		var provider = binding.Values.FirstOrDefault();
-		var actual = provider.GetType();
+		var actual = provider?.GetType();
 
 		// Assert
 		Assert.AreEqual(expected, actual);
@@ -663,7 +654,7 @@ internal sealed class DIBindingTests
 	#endregion
 	#region Nested
 
-	internal sealed class TestFactory :
+	private sealed class TestFactory :
 		IFactory
 	{
 		public bool TryCreate(out object instance)
@@ -672,11 +663,11 @@ internal sealed class DIBindingTests
 		}
 	}
 
-	internal struct TestStruct
+	private struct TestStruct
 	{
 	}
 
-	internal sealed class Test
+	private sealed class Test
 	{
 		public Test(
 			A param)
@@ -684,11 +675,11 @@ internal sealed class DIBindingTests
 		}
 	}
 
-	internal sealed class A
+	private sealed class A
 	{
 	}
 
-	internal sealed class Reflector :
+	private sealed class Reflector :
 		IReflector
 	{
 		public IReflectionInfo GetReflectionInfo<T>()
@@ -706,7 +697,7 @@ internal sealed class DIBindingTests
 				BindingFlags.InvokeMethod);
 
 			var constructorInfo = constructors[0];
-			var types = new List<Type>()
+			var types = new List<Type>
 			{
 				typeof(A)
 			};
@@ -715,10 +706,10 @@ internal sealed class DIBindingTests
 		}
 	}
 
-	internal sealed class DIContainer :
-		IDIContainer
+	private sealed class DiContainer :
+		IDiContainer
 	{
-		public IDIBindingLifeTime Bind<T>()
+		public IDiBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();

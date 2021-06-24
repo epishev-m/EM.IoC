@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-internal sealed class DIContainerTests
+internal sealed class DiContainerTests
 {
 	#region Common
 
@@ -13,12 +13,11 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var actual = false;
-		var reflector = default(Reflector);
 
 		// Act
 		try
 		{
-			var unused = new DIContainer(reflector);
+			var unused = new DiContainer(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -34,7 +33,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		// Act
 		var actual = container.Bind<Test>();
@@ -50,15 +49,14 @@ internal sealed class DIContainerTests
 	public void DIContainer_GetInstanceGeneral_ReturnNull()
 	{
 		// Arrange
-		var expected = default(Test);
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		// Act
 		var actual = container.GetInstance<Test>();
 
 		//Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(null, actual);
 	}
 
 	[Test]
@@ -66,7 +64,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		container.Bind<Test>()
 			.InGlobal()
@@ -85,9 +83,8 @@ internal sealed class DIContainerTests
 		// Arrange
 		var actual = false;
 		var reflector = new Reflector();
-		var type = default(Type);
-		var container = new DIContainer(reflector);
-		
+		var container = new DiContainer(reflector);
+
 		container.Bind<Test>()
 			.InGlobal()
 			.To<Test>();
@@ -95,7 +92,7 @@ internal sealed class DIContainerTests
 		// Act
 		try
 		{
-			var unused = container.GetInstance(type);
+			var unused = container.GetInstance(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -114,7 +111,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		// Act
 		var actual = container.Unbind<string>();
@@ -128,7 +125,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		container.Bind<Test>()
 			.InGlobal()
@@ -146,7 +143,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		container.Bind<Test>()
 			.InGlobal()
@@ -165,7 +162,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		container.Bind<Test>()
 			.InGlobal()
@@ -184,7 +181,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		container.Bind<Test>()
 			.InGlobal()
@@ -203,7 +200,7 @@ internal sealed class DIContainerTests
 	{
 		// Arrange
 		var reflector = new Reflector();
-		var container = new DIContainer(reflector);
+		var container = new DiContainer(reflector);
 
 		container.Bind<Test>()
 			.InLocal()
@@ -220,7 +217,7 @@ internal sealed class DIContainerTests
 	#endregion
 	#region Nested
 
-	internal sealed class Test
+	private sealed class Test
 	{
 		public Test(
 			TestParam param)
@@ -228,11 +225,11 @@ internal sealed class DIContainerTests
 		}
 	}
 
-	internal sealed class TestParam
+	private sealed class TestParam
 	{
 	}
 
-	internal sealed class Reflector :
+	private sealed class Reflector :
 		IReflector
 	{
 		public IReflectionInfo GetReflectionInfo<T>()
@@ -250,7 +247,7 @@ internal sealed class DIContainerTests
 				BindingFlags.InvokeMethod);
 
 			var constructorInfo = constructors[0];
-			var types = new List<Type>()
+			var types = new List<Type>
 			{
 				typeof(TestParam)
 			};

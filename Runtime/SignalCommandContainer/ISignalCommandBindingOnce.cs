@@ -1,13 +1,14 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	public interface ISignalCommandBindingOnce : ISignalCommandBindingComposite
-	{
-		bool IsOneOff
-		{
-			get;
-		}
 
-		ISignalCommandBindingComposite Once();
+public interface ISignalCommandBindingOnce : ISignalCommandBindingComposite
+{
+	bool IsOneOff
+	{
+		get;
 	}
+
+	ISignalCommandBindingComposite Once();
+}
+
 }

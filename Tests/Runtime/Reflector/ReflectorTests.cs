@@ -100,7 +100,6 @@ internal sealed class ReflectorTests
 	public void Reflector_GetReflectionInfo_CountParams()
 	{
 		// Arrange
-		var expected = 2;
 		var type = typeof(Test);
 		var reflector = new Reflector();
 
@@ -109,14 +108,13 @@ internal sealed class ReflectorTests
 		var actual = reflectionInfo.ParameterTypes.Count();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	[Test]
 	public void Reflector_GetReflectionInfoGeneric_CountParams()
 	{
 		// Arrange
-		var expected = 2;
 		var reflector = new Reflector();
 
 		// Act
@@ -124,27 +122,27 @@ internal sealed class ReflectorTests
 		var actual = reflectionInfo.ParameterTypes.Count();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	#endregion
 	#region Nested
 
-	internal sealed class Test
+	private sealed class Test
 	{
 		public Test(int param1, int param2)
 		{
 		}
 	}
 
-	internal sealed class TestNoConstructor
+	private sealed class TestNoConstructor
 	{
 		private TestNoConstructor()
 		{
 		}
 	}
 
-	internal sealed class TestManyConstructors
+	private sealed class TestManyConstructors
 	{
 		public TestManyConstructors(int param)
 		{

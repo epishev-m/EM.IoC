@@ -1,14 +1,16 @@
 ﻿namespace EM.IoC
 {
-	public interface ISignalCommandBindingComposite
+
+public interface ISignalCommandBindingComposite
+{
+	bool? IsSequence
 	{
-		bool? IsSequence
-		{
-			get;
-		}
-
-		ISignalCommandBinding InParallel();
-
-		ISignalCommandBinding InSequence();
+		get;
 	}
+
+	ISignalCommandBinding InParallel();
+
+	ISignalCommandBinding InSequence();
+}
+
 }

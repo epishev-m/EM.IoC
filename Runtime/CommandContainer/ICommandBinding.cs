@@ -1,11 +1,12 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	using EM.Foundation;
+using Foundation;
 
-	public interface ICommandBinding : ICommandBindingExecute
-	{
-		ICommandBinding To<T>()
-			where T : ICommand;
-	}
+public interface ICommandBinding :
+	ICommandBindingExecute
+{
+	ICommandBinding To<T>()
+		where T : ICommand;
+}
+
 }

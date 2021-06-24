@@ -12,12 +12,11 @@ internal sealed class CommandContainerTests
 	{
 		// Arrange
 		var actual = false;
-		var container = default(IDIContainer);
 
 		// Act
 		try
 		{
-			var unused = new CommandContainer(container);
+			var unused = new CommandContainer(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -35,7 +34,7 @@ internal sealed class CommandContainerTests
 	public void CommandContainer_Bind()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var key = typeof(CommandTest);
 
@@ -51,14 +50,13 @@ internal sealed class CommandContainerTests
 	{
 		// Arrange
 		var actual = false;
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
-		var key = default(object);
 
 		// Act
 		try
 		{
-			var unused = commandContainer.Bind(key);
+			var unused = commandContainer.Bind(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -73,7 +71,7 @@ internal sealed class CommandContainerTests
 	public void CommandContainer_BindGeneric()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 
 		// Act
 		var commandContainer = new CommandContainer(container);
@@ -91,8 +89,7 @@ internal sealed class CommandContainerTests
 	{
 		// Arrange
 		var actual = 0;
-		var expected = 2;
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var key = typeof(CommandTest);
 
@@ -108,7 +105,7 @@ internal sealed class CommandContainerTests
 		commandContainer.ReactTo(key);
 
 		//Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	[Test]
@@ -116,7 +113,7 @@ internal sealed class CommandContainerTests
 	{
 		// Arrange
 		var expected = new Test();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var key = typeof(CommandTest);
 		CommandTest.Collback = () => { };
@@ -139,8 +136,7 @@ internal sealed class CommandContainerTests
 	{
 		// Arrange
 		var actual = 0;
-		var expected = 2;
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 
 		CommandTest.Collback = () => actual++;
@@ -155,7 +151,7 @@ internal sealed class CommandContainerTests
 		commandContainer.ReactTo<CommandTest>();
 
 		//Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	[Test]
@@ -163,7 +159,7 @@ internal sealed class CommandContainerTests
 	{
 		// Arrange
 		var expected = new Test();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 
 		CommandTest.Collback = () => { };
@@ -188,7 +184,7 @@ internal sealed class CommandContainerTests
 	public void CommandContainer_UnbindGeneric_ReturnFalse()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 
 		// Act
 		var commandContainer = new CommandContainer(container);
@@ -202,7 +198,7 @@ internal sealed class CommandContainerTests
 	public void CommandContainer_UnbindGeneric_ReturnTrue()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 
 		commandContainer.Bind<CommandTest>()
@@ -221,13 +217,13 @@ internal sealed class CommandContainerTests
 	public void CommandContainer_UnbindAll()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var expected = commandContainer.Bind<CommandTest>();
 
 		expected.InGlobal()
-		.InParallel()
-		.To<CommandTest>();
+			.InParallel()
+			.To<CommandTest>();
 
 		// Act
 		commandContainer.UnbindAll();
@@ -241,13 +237,13 @@ internal sealed class CommandContainerTests
 	public void CommandContainer_UnbindLifeTime_AreNotEqual()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var expected = commandContainer.Bind<CommandTest>();
 
 		expected.InGlobal()
-		.InParallel()
-		.To<CommandTest>();
+			.InParallel()
+			.To<CommandTest>();
 
 		// Act
 		commandContainer.Unbind(LifeTime.Global);
@@ -261,13 +257,13 @@ internal sealed class CommandContainerTests
 	public void CommandContainer_UnbindLifeTime_AreEqual()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var expected = commandContainer.Bind<CommandTest>();
 
 		expected.InLocal()
-		.InParallel()
-		.To<CommandTest>();
+			.InParallel()
+			.To<CommandTest>();
 
 		// Act
 		commandContainer.Unbind(LifeTime.Global);
@@ -280,15 +276,13 @@ internal sealed class CommandContainerTests
 	#endregion
 	#region Nested
 
-	internal sealed class CommandTest : ICommand
+	private sealed class CommandTest :
+		ICommand
 	{
-		#region CommandTest
-
 		public static Action Collback;
 
 		public static Test DataTest;
 
-		#endregion
 		#region ICommand
 
 		public object Data
@@ -310,16 +304,16 @@ internal sealed class CommandContainerTests
 		public void Execute()
 		{
 			Collback.Invoke();
-			Done.Invoke();
+			Done?.Invoke();
 		}
 
 		#endregion
 	}
 
-	internal sealed class DIContainer :
-		IDIContainer
+	private sealed class DiContainer :
+		IDiContainer
 	{
-		public IDIBindingLifeTime Bind<T>()
+		public IDiBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -354,7 +348,7 @@ internal sealed class CommandContainerTests
 		}
 	}
 
-	internal sealed class Test
+	private sealed class Test
 	{
 	}
 

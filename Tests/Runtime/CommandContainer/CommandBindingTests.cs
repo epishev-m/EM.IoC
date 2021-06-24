@@ -13,13 +13,12 @@ internal sealed class CommandBindingTests
 	{
 		// Arrange
 		var actual = false;
-		var container = default(ICommandContainer);
 		var key = typeof(object);
 
 		// Act
 		try
 		{
-			var unused = new CommandBinding(container, key, null, null);
+			var unused = new CommandBinding(null, key, null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -36,12 +35,11 @@ internal sealed class CommandBindingTests
 		// Arrange
 		var actual = false;
 		var container = new CommandContainerTest();
-		var key = default(object);
 
 		// Act
 		try
 		{
-			var unused = new CommandBinding(container, key, null, null);
+			var unused = new CommandBinding(container, null, null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -59,7 +57,6 @@ internal sealed class CommandBindingTests
 	public void CommandBinding_InGlobal()
 	{
 		// Arrange
-		var expected = LifeTime.Global;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new CommandBinding(container, key, null, null);
@@ -69,7 +66,7 @@ internal sealed class CommandBindingTests
 		var actual = binder.LifeTime;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(LifeTime.Global, actual);
 	}
 
 	[Test]
@@ -100,7 +97,6 @@ internal sealed class CommandBindingTests
 	public void CommandBinding_InLocal()
 	{
 		// Arrange
-		var expected = LifeTime.Local;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new CommandBinding(container, key, null, null);
@@ -110,7 +106,7 @@ internal sealed class CommandBindingTests
 		var actual = binder.LifeTime;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(LifeTime.Local, actual);
 	}
 
 	[Test]
@@ -144,7 +140,6 @@ internal sealed class CommandBindingTests
 	public void CommandBinding_InSequence()
 	{
 		// Arrange
-		var expected = true;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new CommandBinding(container, key, null, null);
@@ -155,7 +150,7 @@ internal sealed class CommandBindingTests
 		var actual = binder.IsSequence;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.IsTrue(actual);
 	}
 
 	[Test]
@@ -209,7 +204,6 @@ internal sealed class CommandBindingTests
 	public void CommandBinding_InParallel()
 	{
 		// Arrange
-		var expected = false;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new CommandBinding(container, key, null, null);
@@ -219,7 +213,7 @@ internal sealed class CommandBindingTests
 		var actual = binder.IsSequence;
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.IsFalse(actual);
 	}
 
 	[Test]
@@ -300,7 +294,6 @@ internal sealed class CommandBindingTests
 	public void CommandBinding_InParallelAnd2To()
 	{
 		// Arrange
-		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new CommandBinding(container, key, null, null);
@@ -314,14 +307,13 @@ internal sealed class CommandBindingTests
 		var actual = values.Count();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	[Test]
 	public void CommandBinding_InSequenceAnd2To()
 	{
 		// Arrange
-		var expected = 2;
 		var container = new CommandContainerTest();
 		var key = typeof(object);
 		var binder = new CommandBinding(container, key, null, null);
@@ -335,7 +327,7 @@ internal sealed class CommandBindingTests
 		var actual = values.Count();
 
 		// Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	#endregion
@@ -384,7 +376,8 @@ internal sealed class CommandBindingTests
 	#endregion
 	#region Nested
 
-	internal sealed class CommandContainerTest : ICommandContainer
+	private sealed class CommandContainerTest :
+		ICommandContainer
 	{
 		#region ICommandContainer
 
@@ -405,7 +398,7 @@ internal sealed class CommandBindingTests
 
 		public void ReactTo(object trigger, object data = null)
 		{
-			isExecuted = true;
+			IsExecuted = true;
 		}
 
 		public bool Unbind<T>()
@@ -431,14 +424,13 @@ internal sealed class CommandBindingTests
 		#endregion
 		#region CommandContainerTest
 
-		private bool isExecuted = false;
-
-		public bool IsExecuted => isExecuted;
+		public bool IsExecuted { get; private set; }
 
 		#endregion
 	}
 
-	internal sealed class CommandTest : ICommand
+	private sealed class CommandTest :
+		ICommand
 	{
 		public object Data
 		{
@@ -458,7 +450,7 @@ internal sealed class CommandBindingTests
 
 		public void Execute()
 		{
-			Done.Invoke();
+			Done?.Invoke();
 		}
 	}
 

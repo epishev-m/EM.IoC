@@ -11,14 +11,13 @@ internal sealed class InstanceProviderActivatorTests
 	{
 		// Arrange
 		var actual = false;
-		var type = default(Type);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 
 		// Act
 		try
 		{
-			var unused = new InstanceProviderActivator(type, reflector, container);
+			var unused = new InstanceProviderActivator(null, reflector, container);
 		}
 		catch (ArgumentNullException)
 		{
@@ -35,13 +34,12 @@ internal sealed class InstanceProviderActivatorTests
 		// Arrange
 		var actual = false;
 		var type = typeof(Test);
-		var reflector = default(Reflector);
-		var container = new DIContainer();
+		var container = new DiContainer();
 
 		// Act
 		try
 		{
-			var unused = new InstanceProviderActivator(type, reflector, container);
+			var unused = new InstanceProviderActivator(type, null, container);
 		}
 		catch (ArgumentNullException)
 		{
@@ -59,12 +57,11 @@ internal sealed class InstanceProviderActivatorTests
 		var actual = false;
 		var type = typeof(Test);
 		var reflector = new Reflector();
-		var container = default(DIContainer);
 
 		// Act
 		try
 		{
-			var unused = new InstanceProviderActivator(type, reflector, container);
+			var unused = new InstanceProviderActivator(type, reflector, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -79,10 +76,9 @@ internal sealed class InstanceProviderActivatorTests
 	public void InstanceProviderActivator_GetInstance()
 	{
 		// Arrange
-		var expected = true;
 		var type = typeof(Test);
 		var reflector = new Reflector();
-		var container = new DIContainer();
+		var container = new DiContainer();
 
 		// Act
 		var provider = new InstanceProviderActivator(type, reflector, container);
@@ -91,10 +87,10 @@ internal sealed class InstanceProviderActivatorTests
 
 		// Assert
 		Assert.IsNotNull(instance);
-		Assert.AreEqual(expected, actual);
+		Assert.IsTrue(actual);
 	}
 
-	internal sealed class Test
+	private sealed class Test
 	{
 		public Test(
 			A param)
@@ -102,11 +98,11 @@ internal sealed class InstanceProviderActivatorTests
 		}
 	}
 
-	internal sealed class A
+	private sealed class A
 	{
 	}
 
-	internal sealed class Reflector :
+	private sealed class Reflector :
 		IReflector
 	{
 		public IReflectionInfo GetReflectionInfo<T>()
@@ -124,7 +120,7 @@ internal sealed class InstanceProviderActivatorTests
 				BindingFlags.InvokeMethod);
 
 			var constructorInfo = constructors[0];
-			var types = new List<Type>()
+			var types = new List<Type>
 			{
 				typeof(A)
 			};
@@ -133,10 +129,10 @@ internal sealed class InstanceProviderActivatorTests
 		}
 	}
 
-	internal sealed class DIContainer :
-		IDIContainer
+	private sealed class DiContainer :
+		IDiContainer
 	{
-		public IDIBindingLifeTime Bind<T>()
+		public IDiBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();

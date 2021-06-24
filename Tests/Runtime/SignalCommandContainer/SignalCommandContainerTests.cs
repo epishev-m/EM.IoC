@@ -12,12 +12,11 @@ internal sealed class SignalCommandContainerTests
 	{
 		// Arrange
 		var actual = false;
-		var container = default(IDIContainer);
 
 		// Act
 		try
 		{
-			var unused = new SignalCommandContainer(container);
+			var unused = new SignalCommandContainer(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -35,7 +34,7 @@ internal sealed class SignalCommandContainerTests
 	public void SignalCommandContainer_Bind()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 
 		// Act
 		var signalCommandContainer = new SignalCommandContainer(container);
@@ -50,13 +49,13 @@ internal sealed class SignalCommandContainerTests
 	{
 		// Arrange
 		var actual = false;
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var signalCommandContainer = new SignalCommandContainer(container);
 
 		// Act
 		try
 		{
-			var unused = signalCommandContainer.Bind<SignalFaceTest>();
+			var unused = signalCommandContainer.Bind<SignalFakeTest>();
 		}
 		catch (ArgumentNullException)
 		{
@@ -75,8 +74,7 @@ internal sealed class SignalCommandContainerTests
 	{
 		// Arrange
 		var actual = 0;
-		var expected = 2;
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new SignalCommandContainer(container);
 		CommandTest.Collback = () => actual++;
 
@@ -89,7 +87,7 @@ internal sealed class SignalCommandContainerTests
 			.Execute();
 
 		//Assert
-		Assert.AreEqual(expected, actual);
+		Assert.AreEqual(2, actual);
 	}
 
 	[Test]
@@ -97,7 +95,7 @@ internal sealed class SignalCommandContainerTests
 	{
 		// Arrange
 		var expected = new Test();
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		CommandTest.Collback = () => { };
 
@@ -121,7 +119,7 @@ internal sealed class SignalCommandContainerTests
 	public void SignalCommandContainer_Unbind_ReturnFalse()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 
 		// Act
 		var commandContainer = new SignalCommandContainer(container);
@@ -135,7 +133,7 @@ internal sealed class SignalCommandContainerTests
 	public void SignalCommandContainer_Unbind_ReturnTrue()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new SignalCommandContainer(container);
 
 		commandContainer.Bind<SignalTest>()
@@ -154,7 +152,7 @@ internal sealed class SignalCommandContainerTests
 	public void SignalCommandContainer_UnbindAll()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new SignalCommandContainer(container);
 		var expected = commandContainer.Bind<SignalTest>();
 
@@ -171,10 +169,10 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	[Test]
-	public void SignalCommandContainer_UnbindLifiTime_AreNotEqual()
+	public void SignalCommandContainer_UnbindLifeTime_AreNotEqual()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new SignalCommandContainer(container);
 		var expected = commandContainer.Bind<SignalTest>();
 
@@ -191,10 +189,10 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	[Test]
-	public void SignalCommandContainer_UnbindLifiTime_AreEqual()
+	public void SignalCommandContainer_UnbindLifeTime_AreEqual()
 	{
 		// Arrange
-		var container = new DIContainer();
+		var container = new DiContainer();
 		var commandContainer = new SignalCommandContainer(container);
 		var expected = commandContainer.Bind<SignalTest>();
 
@@ -213,15 +211,15 @@ internal sealed class SignalCommandContainerTests
 	#endregion
 	#region Nested
 
-	internal sealed class SignalTest : SignalEx
+	private sealed class SignalTest : SignalEx
 	{
 	}
 
-	internal sealed class SignalFaceTest : SignalEx
+	private sealed class SignalFakeTest : SignalEx
 	{
 	}
 
-	internal sealed class CommandTest : ICommand
+	private sealed class CommandTest : ICommand
 	{
 		#region CommandTest
 
@@ -251,18 +249,18 @@ internal sealed class SignalCommandContainerTests
 		public void Execute()
 		{
 			Collback.Invoke();
-			Done.Invoke();
+			Done?.Invoke();
 		}
 
 		#endregion
 	}
 
-	internal sealed class DIContainer :
-		IDIContainer
+	private sealed class DiContainer :
+		IDiContainer
 	{
 		private readonly ISignal signal = new SignalTest();
 
-		public IDIBindingLifeTime Bind<T>()
+		public IDiBindingLifeTime Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -297,7 +295,7 @@ internal sealed class SignalCommandContainerTests
 		}
 	}
 
-	internal sealed class Test
+	private sealed class Test
 	{
 	}
 

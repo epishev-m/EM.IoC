@@ -1,64 +1,65 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	using UnityEngine;
+using UnityEngine;
 
-	public abstract class Context : MonoBehaviour
+[DisallowMultipleComponent]
+public abstract class Context : MonoBehaviour
+{
+	private static Context _mainContext;
+
+	private static IDiContainer _container;
+
+	private static ISignalCommandContainer _signalCommandContainer;
+
+	#region MonoBehaviour
+
+	private void Awake()
 	{
-		#region MonoBehaviour
-
-		private void Awake()
+		if (_mainContext == null)
 		{
-			if (mainContext == null)
-			{
-				mainContext = this;
+			_mainContext = this;
 
-				var reflector = new Reflector();
-				container = new DIContainer(reflector);
-				signalCommandContainer = new SignalCommandContainer(container);
-			}
-
-			Initialize();
+			var reflector = new Reflector();
+			_container = new DiContainer(reflector);
+			_signalCommandContainer = new SignalCommandContainer(_container);
 		}
 
-		private void Start()
-		{
-			Run();
-		}
-
-		private void OnDestroy()
-		{
-			Release();
-
-			if (mainContext == this)
-			{
-				signalCommandContainer.UnbindAll();
-				container.UnbindAll();
-			}
-			else
-			{
-				signalCommandContainer.Unbind(LifeTime.Local);
-				container.Unbind(LifeTime.Local);
-			}
-		}
-
-		#endregion
-		#region Context
-
-		protected static Context mainContext;
-
-		protected static IDIContainer container;
-
-		protected static ISignalCommandContainer signalCommandContainer;
-
-		public static bool IsExistedMainContext => mainContext != null;
-
-		protected abstract void Initialize();
-
-		protected abstract void Release();
-
-		protected abstract void Run();
-
-		#endregion
+		Initialize();
 	}
+
+	private void Start()
+	{
+		Run();
+	}
+
+	private void OnDestroy()
+	{
+		Release();
+
+		if (_mainContext == this)
+		{
+			_signalCommandContainer.UnbindAll();
+			_container.UnbindAll();
+		}
+		else
+		{
+			_signalCommandContainer.Unbind(LifeTime.Local);
+			_container.Unbind(LifeTime.Local);
+		}
+	}
+
+	#endregion
+	#region Context
+
+	public static bool IsExistedMainContext => _mainContext != null;
+
+	protected abstract void Initialize();
+
+	protected abstract void Release();
+
+	protected abstract void Run();
+
+	#endregion
+}
+
 }

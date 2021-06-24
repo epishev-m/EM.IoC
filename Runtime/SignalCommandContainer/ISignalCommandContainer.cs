@@ -1,18 +1,19 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	using EM.Foundation;
+using Foundation;
 
-	public interface ISignalCommandContainer
-	{
-		ISignalCommandBindingLifeTime Bind<T>()
-			where T : class, ISignal;
+public interface ISignalCommandContainer
+{
+	ISignalCommandBindingLifeTime Bind<T>()
+		where T : class, ISignal;
 
-		bool Unbind<T>()
-			where T : class, ISignal;
+	bool Unbind<T>()
+		where T : class, ISignal;
 
-		void Unbind(LifeTime lifeTime);
+	void Unbind(
+		LifeTime lifeTime);
 
-		void UnbindAll();
-	}
+	void UnbindAll();
+}
+
 }

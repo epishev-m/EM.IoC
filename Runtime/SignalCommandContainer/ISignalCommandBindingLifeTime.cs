@@ -1,15 +1,16 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	public interface ISignalCommandBindingLifeTime
+
+public interface ISignalCommandBindingLifeTime
+{
+	LifeTime LifeTime
 	{
-		LifeTime LifeTime
-		{
-			get;
-		}
-
-		ISignalCommandBindingComposite InGlobal();
-
-		ISignalCommandBindingComposite InLocal();
+		get;
 	}
+
+	ISignalCommandBindingComposite InGlobal();
+
+	ISignalCommandBindingComposite InLocal();
+}
+
 }

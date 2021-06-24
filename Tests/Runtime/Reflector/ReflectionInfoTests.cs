@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 
 internal sealed class ReflectionInfoTests
 {
@@ -11,13 +10,12 @@ internal sealed class ReflectionInfoTests
 	{
 		// Arrange
 		var actual = false;
-		var param1 = default(ConstructorInfo);
-		var param2 = new List<Type>();
+		var param = new List<Type>();
 
 		// Act
 		try
 		{
-			var reflectionInfo = new ReflectionInfo(param1, param2);
+			var unused = new ReflectionInfo(null, param);
 		}
 		catch (ArgumentNullException)
 		{
@@ -33,13 +31,12 @@ internal sealed class ReflectionInfoTests
 	{
 		// Arrange
 		var actual = false;
-		var param1 = typeof(Test).GetConstructor(new Type[0]);
-		var param2 = default(IEnumerable<Type>);
+		var param = typeof(Test).GetConstructor(new Type[0]);
 
 		// Act
 		try
 		{
-			var reflectionInfo = new ReflectionInfo(param1, param2);
+			var unused = new ReflectionInfo(param, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -52,11 +49,8 @@ internal sealed class ReflectionInfoTests
 
 	#region Nested
 
-	internal sealed class Test
+	private sealed class Test
 	{
-		public Test()
-		{
-		}
 	}
 
 	#endregion

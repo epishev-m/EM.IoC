@@ -1,20 +1,20 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Reflection;
-	
-	public interface IReflectionInfo
-	{
-		ConstructorInfo ConstructorInfo
-		{
-			get;
-		}
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 
-		IEnumerable<Type> ParameterTypes
-		{
-			get;
-		}
+public interface IReflectionInfo
+{
+	ConstructorInfo ConstructorInfo
+	{
+		get;
 	}
+
+	IEnumerable<Type> ParameterTypes
+	{
+		get;
+	}
+}
+
 }

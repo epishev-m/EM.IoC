@@ -1,15 +1,11 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	public interface ICommandBindingComposite
-	{
-		bool? IsSequence
-		{
-			get;
-		}
 
-		ICommandBinding InParallel();
+public interface ICommandBindingComposite
+{
+	ICommandBinding InParallel();
 
-		ICommandBinding InSequence();
-	}
+	ICommandBinding InSequence();
+}
+
 }

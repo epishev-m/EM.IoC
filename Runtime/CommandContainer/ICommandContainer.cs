@@ -1,28 +1,29 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	public interface ICommandContainer
-	{
-		void ReactTo<T>(
-			object data = null);
 
-		void ReactTo(
-			object trigger,
-			object data = null);
+public interface ICommandContainer
+{
+	void ReactTo<T>(
+		object data = null);
 
-		ICommandBindingLifeTime Bind<T>();
+	void ReactTo(
+		object trigger,
+		object data = null);
 
-		ICommandBindingLifeTime Bind(
-			object key);
+	ICommandBindingLifeTime Bind<T>();
 
-		bool Unbind<T>();
+	ICommandBindingLifeTime Bind(
+		object key);
 
-		bool Unbind(
-			object key);
+	bool Unbind<T>();
 
-		void UnbindAll();
+	bool Unbind(
+		object key);
 
-		void Unbind(
-			LifeTime lifeTime);
-	}
+	void UnbindAll();
+
+	void Unbind(
+		LifeTime lifeTime);
+}
+
 }

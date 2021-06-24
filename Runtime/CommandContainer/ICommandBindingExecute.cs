@@ -1,8 +1,9 @@
-﻿
-namespace EM.IoC
+﻿namespace EM.IoC
 {
-	public interface ICommandBindingExecute
-	{
-		void Execute(object data = null);
-	}
+
+public interface ICommandBindingExecute
+{
+	void Execute(object data = null);
+}
+
 }

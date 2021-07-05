@@ -1,6 +1,7 @@
 ﻿using EM.IoC;
 using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 internal sealed class ReflectorTests
@@ -128,6 +129,7 @@ internal sealed class ReflectorTests
 	#endregion
 	#region Nested
 
+	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	private sealed class Test
 	{
 		public Test(int param1, int param2)
@@ -135,6 +137,7 @@ internal sealed class ReflectorTests
 		}
 	}
 
+	[SuppressMessage("ReSharper", "ConvertToStaticClass")]
 	private sealed class TestNoConstructor
 	{
 		private TestNoConstructor()
@@ -142,6 +145,8 @@ internal sealed class ReflectorTests
 		}
 	}
 
+	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	private sealed class TestManyConstructors
 	{
 		public TestManyConstructors(int param)

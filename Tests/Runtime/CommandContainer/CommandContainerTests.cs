@@ -8,7 +8,7 @@ internal sealed class CommandContainerTests
 	#region Constructor
 
 	[Test]
-	public void CommandContainer_Constructor_Exeption()
+	public void CommandContainer_Constructor_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -46,7 +46,7 @@ internal sealed class CommandContainerTests
 	}
 
 	[Test]
-	public void CommandContainer_Bind_Exeption()
+	public void CommandContainer_Bind_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -93,7 +93,7 @@ internal sealed class CommandContainerTests
 		var commandContainer = new CommandContainer(container);
 		var key = typeof(CommandTest);
 
-		CommandTest.Collback = () => actual++;
+		CommandTest.Callback = () => actual++;
 
 		commandContainer.Bind(key)
 			.InGlobal()
@@ -116,7 +116,7 @@ internal sealed class CommandContainerTests
 		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var key = typeof(CommandTest);
-		CommandTest.Collback = () => { };
+		CommandTest.Callback = () => { };
 
 		commandContainer.Bind(key)
 			.InGlobal()
@@ -139,7 +139,7 @@ internal sealed class CommandContainerTests
 		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 
-		CommandTest.Collback = () => actual++;
+		CommandTest.Callback = () => actual++;
 
 		commandContainer.Bind<CommandTest>()
 			.InGlobal()
@@ -162,7 +162,7 @@ internal sealed class CommandContainerTests
 		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 
-		CommandTest.Collback = () => { };
+		CommandTest.Callback = () => { };
 
 		commandContainer.Bind<CommandTest>()
 			.InGlobal()
@@ -279,7 +279,7 @@ internal sealed class CommandContainerTests
 	private sealed class CommandTest :
 		ICommand
 	{
-		public static Action Collback;
+		public static Action Callback;
 
 		public static Test DataTest;
 
@@ -303,7 +303,7 @@ internal sealed class CommandContainerTests
 
 		public void Execute()
 		{
-			Collback.Invoke();
+			Callback.Invoke();
 			Done?.Invoke();
 		}
 

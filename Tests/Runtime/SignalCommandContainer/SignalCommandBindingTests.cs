@@ -2,6 +2,7 @@
 using EM.IoC;
 using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 internal sealed class SignalCommandBindingTests
@@ -9,7 +10,7 @@ internal sealed class SignalCommandBindingTests
 	#region Constructor
 
 	[Test]
-	public void SignalCommandBinding_ConstructorParam1_Exeption()
+	public void SignalCommandBinding_ConstructorParam1_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -30,7 +31,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	[Test]
-	public void SignalCommandBinding_ConstructorParam2_Exeption()
+	public void SignalCommandBinding_ConstructorParam2_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -70,7 +71,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	[Test]
-	public void SignalCommandBinding_InGlobal_Exeption()
+	public void SignalCommandBinding_InGlobal_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -111,7 +112,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	[Test]
-	public void SignalCommandBinding_InLocal_Exeption()
+	public void SignalCommandBinding_InLocal_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -156,7 +157,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	[Test]
-	public void SignalCommandBinding_InSequence_Exeption()
+	public void SignalCommandBinding_InSequence_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -179,7 +180,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	[Test]
-	public void SignalCommandBinding_InSequence_InSequence_Exeption()
+	public void SignalCommandBinding_InSequence_InSequence_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -222,7 +223,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	[Test]
-	public void SignalCommandBinding_InParallel_Exeption()
+	public void SignalCommandBinding_InParallel_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -245,7 +246,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	[Test]
-	public void SignalCommandBinding_InParallel_InParallel_Exeption()
+	public void SignalCommandBinding_InParallel_InParallel_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -293,7 +294,7 @@ internal sealed class SignalCommandBindingTests
 	#region To
 
 	[Test]
-	public void SignalCommandBinding_To_Exeption()
+	public void SignalCommandBinding_To_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -474,6 +475,7 @@ internal sealed class SignalCommandBindingTests
 		#endregion
 	}
 
+	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
 	private sealed class CommandTest :
 		ICommand
 	{

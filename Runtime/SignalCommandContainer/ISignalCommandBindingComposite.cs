@@ -3,7 +3,7 @@
 
 public interface ISignalCommandBindingComposite
 {
-	bool? IsSequence
+	bool IsSequence
 	{
 		get;
 	}

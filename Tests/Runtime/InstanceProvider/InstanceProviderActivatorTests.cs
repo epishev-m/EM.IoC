@@ -2,12 +2,13 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 internal sealed class InstanceProviderActivatorTests
 {
 	[Test]
-	public void InstanceProviderActivator_ConstructorParam1_Exeption()
+	public void InstanceProviderActivator_ConstructorParam1_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -29,7 +30,7 @@ internal sealed class InstanceProviderActivatorTests
 	}
 
 	[Test]
-	public void InstanceProviderActivator_ConstructorParam2_Exeption()
+	public void InstanceProviderActivator_ConstructorParam2_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -51,7 +52,7 @@ internal sealed class InstanceProviderActivatorTests
 	}
 
 	[Test]
-	public void InstanceProviderActivator_ConstructorParam3_Exeption()
+	public void InstanceProviderActivator_ConstructorParam3_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -90,6 +91,7 @@ internal sealed class InstanceProviderActivatorTests
 		Assert.IsTrue(actual);
 	}
 
+	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	private sealed class Test
 	{
 		public Test(

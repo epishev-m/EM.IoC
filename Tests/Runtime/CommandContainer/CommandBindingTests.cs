@@ -2,6 +2,7 @@
 using EM.IoC;
 using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
 internal sealed class CommandBindingTests
@@ -9,7 +10,7 @@ internal sealed class CommandBindingTests
 	#region Constructor
 
 	[Test]
-	public void CommandBinding_ConstructorParam1_Exeption()
+	public void CommandBinding_ConstructorParam1_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -30,7 +31,7 @@ internal sealed class CommandBindingTests
 	}
 
 	[Test]
-	public void CommandBinding_ConstructorParam2_Exeption()
+	public void CommandBinding_ConstructorParam2_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -70,7 +71,7 @@ internal sealed class CommandBindingTests
 	}
 
 	[Test]
-	public void CommandBinding_InGlobal_Exeption()
+	public void CommandBinding_InGlobal_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -110,7 +111,7 @@ internal sealed class CommandBindingTests
 	}
 
 	[Test]
-	public void CommandBinding_InLocal_Exeption()
+	public void CommandBinding_InLocal_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -154,7 +155,7 @@ internal sealed class CommandBindingTests
 	}
 
 	[Test]
-	public void CommandBinding_InSequence_Exeption()
+	public void CommandBinding_InSequence_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -177,7 +178,7 @@ internal sealed class CommandBindingTests
 	}
 
 	[Test]
-	public void CommandBinding_InSequence_InSequence_Exeption()
+	public void CommandBinding_InSequence_InSequence_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -217,7 +218,7 @@ internal sealed class CommandBindingTests
 	}
 
 	[Test]
-	public void CommandBinding_InParallel_Exeption()
+	public void CommandBinding_InParallel_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -240,7 +241,7 @@ internal sealed class CommandBindingTests
 	}
 
 	[Test]
-	public void CommandBinding_InParallel_InParallel_Exeption()
+	public void CommandBinding_InParallel_InParallel_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -267,7 +268,7 @@ internal sealed class CommandBindingTests
 	#region To
 
 	[Test]
-	public void CommandBinding_To_Exeption()
+	public void CommandBinding_To_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -429,6 +430,7 @@ internal sealed class CommandBindingTests
 		#endregion
 	}
 
+	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
 	private sealed class CommandTest :
 		ICommand
 	{

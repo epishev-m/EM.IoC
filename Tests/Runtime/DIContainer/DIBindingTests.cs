@@ -3,6 +3,7 @@ using EM.IoC;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -11,7 +12,7 @@ internal sealed class DiBindingTests
 	#region Constructor
 
 	[Test]
-	public void DIBinding_ConstructorParam1_Exeption()
+	public void DIBinding_ConstructorParam1_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -33,7 +34,7 @@ internal sealed class DiBindingTests
 	}
 
 	[Test]
-	public void DIBinding_ConstructorParam2_Exeption()
+	public void DIBinding_ConstructorParam2_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -55,7 +56,7 @@ internal sealed class DiBindingTests
 	}
 
 	[Test]
-	public void DIBinding_ConstructorParam3_Exeption()
+	public void DIBinding_ConstructorParam3_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -667,6 +668,7 @@ internal sealed class DiBindingTests
 	{
 	}
 
+	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	private sealed class Test
 	{
 		public Test(

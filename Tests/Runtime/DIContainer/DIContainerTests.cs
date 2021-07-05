@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 internal sealed class DiContainerTests
@@ -217,6 +218,8 @@ internal sealed class DiContainerTests
 	#endregion
 	#region Nested
 
+	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
 	private sealed class Test
 	{
 		public Test(

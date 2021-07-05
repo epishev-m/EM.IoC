@@ -2,13 +2,14 @@
 using EM.IoC;
 using NUnit.Framework;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 internal sealed class SignalCommandContainerTests
 {
 	#region Constructor
 
 	[Test]
-	public void SignalCommandContainer_Constructor_Exeption()
+	public void SignalCommandContainer_Constructor_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -45,7 +46,7 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	[Test]
-	public void SignalCommandContainer_Bind_Exeption()
+	public void SignalCommandContainer_Bind_Exception()
 	{
 		// Arrange
 		var actual = false;
@@ -76,7 +77,7 @@ internal sealed class SignalCommandContainerTests
 		var actual = 0;
 		var container = new DiContainer();
 		var commandContainer = new SignalCommandContainer(container);
-		CommandTest.Collback = () => actual++;
+		CommandTest.Callback = () => actual++;
 
 		// Act
 		commandContainer.Bind<SignalTest>()
@@ -97,7 +98,7 @@ internal sealed class SignalCommandContainerTests
 		var expected = new Test();
 		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
-		CommandTest.Collback = () => { };
+		CommandTest.Callback = () => { };
 
 		// Act
 		commandContainer.Bind<SignalTest>()
@@ -215,6 +216,7 @@ internal sealed class SignalCommandContainerTests
 	{
 	}
 
+	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
 	private sealed class SignalFakeTest : SignalEx
 	{
 	}
@@ -223,7 +225,7 @@ internal sealed class SignalCommandContainerTests
 	{
 		#region CommandTest
 
-		public static Action Collback;
+		public static Action Callback;
 
 		public static Test DataTest;
 
@@ -248,7 +250,7 @@ internal sealed class SignalCommandContainerTests
 
 		public void Execute()
 		{
-			Collback.Invoke();
+			Callback.Invoke();
 			Done?.Invoke();
 		}
 

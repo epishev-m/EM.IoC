@@ -44,7 +44,7 @@ public class CommandContainer :
 			return;
 		}
 
-		var composite = (bool)binding.IsSequence ? GetSequence() : GetBatch();
+		var composite = binding.IsSequence ? GetSequence() : GetBatch();
 		var commandTypesArray = binding.Values;
 
 		foreach (var type in commandTypesArray)
@@ -54,7 +54,7 @@ public class CommandContainer :
 			composite.Add(command);
 		}
 
-		composite.Done += () => PutComposite(composite, (bool)binding.IsSequence);
+		composite.Done += () => PutComposite(composite, binding.IsSequence);
 		composite.Execute();
 	}
 

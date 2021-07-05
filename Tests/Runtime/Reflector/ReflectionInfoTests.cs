@@ -6,16 +6,15 @@ using System.Collections.Generic;
 internal sealed class ReflectionInfoTests
 {
 	[Test]
-	public void ReflectionInfo_ConstructorParam1_Exeprion()
+	public void ReflectionInfo_ConstructorParam1_Exception()
 	{
 		// Arrange
 		var actual = false;
-		var param = new List<Type>();
 
 		// Act
 		try
 		{
-			var unused = new ReflectionInfo(null, param);
+			var unused = new ReflectionInfo(null, new List<Type>());
 		}
 		catch (ArgumentNullException)
 		{
@@ -27,7 +26,7 @@ internal sealed class ReflectionInfoTests
 	}
 
 	[Test]
-	public void ReflectionInfo_ConstructorParam2_Exeprion()
+	public void ReflectionInfo_ConstructorParam2_Exception()
 	{
 		// Arrange
 		var actual = false;

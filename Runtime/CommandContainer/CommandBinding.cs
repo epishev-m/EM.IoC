@@ -35,6 +35,16 @@ public class CommandBinding :
 	#endregion
 	#region ICommandBindingComposite
 
+	public bool IsSequence
+	{
+		get
+		{
+			var value = isSequence != null && (bool)isSequence;
+
+			return value;
+		}
+	}
+
 	public ICommandBinding InParallel()
 	{
 		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(InParallel));
@@ -77,8 +87,6 @@ public class CommandBinding :
 
 	#endregion
 	#region CommandBinding
-
-	public bool? IsSequence => isSequence;
 
 	public LifeTime LifeTime
 	{

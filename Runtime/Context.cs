@@ -3,25 +3,26 @@
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public abstract class Context : MonoBehaviour
+public abstract class Context :
+	MonoBehaviour
 {
-	private static Context _mainContext;
+	private static Context mainContext;
 
-	private static IDiContainer _container;
+	private static IDiContainer container;
 
-	private static ISignalCommandContainer _signalCommandContainer;
+	private static ISignalCommandContainer signalCommandContainer;
 
 	#region MonoBehaviour
 
 	private void Awake()
 	{
-		if (_mainContext == null)
+		if (mainContext == null)
 		{
-			_mainContext = this;
+			mainContext = this;
 
 			var reflector = new Reflector();
-			_container = new DiContainer(reflector);
-			_signalCommandContainer = new SignalCommandContainer(_container);
+			container = new DiContainer(reflector);
+			signalCommandContainer = new SignalCommandContainer(container);
 		}
 
 		Initialize();
@@ -36,22 +37,22 @@ public abstract class Context : MonoBehaviour
 	{
 		Release();
 
-		if (_mainContext == this)
+		if (mainContext == this)
 		{
-			_signalCommandContainer.UnbindAll();
-			_container.UnbindAll();
+			signalCommandContainer.UnbindAll();
+			container.UnbindAll();
 		}
 		else
 		{
-			_signalCommandContainer.Unbind(LifeTime.Local);
-			_container.Unbind(LifeTime.Local);
+			signalCommandContainer.Unbind(LifeTime.Local);
+			container.Unbind(LifeTime.Local);
 		}
 	}
 
 	#endregion
 	#region Context
 
-	public static bool IsExistedMainContext => _mainContext != null;
+	public static bool IsExistedMainContext => mainContext != null;
 
 	protected abstract void Initialize();
 

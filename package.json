@@ -1,7 +1,7 @@
 {
 	"name": "com.em.ioc",
 	"displayName": "EM IoC",
-	"version": "0.0.1",
+	"version": "0.0.2",
     "unity": "2020.1",
     "unityRelease": "7f1",
 	"dependencies": {

@@ -8,9 +8,9 @@ public abstract class Context :
 {
 	private static Context mainContext;
 
-	private static IDiContainer container;
+	protected static IDiContainer Container;
 
-	private static ISignalCommandContainer signalCommandContainer;
+	protected static ISignalCommandContainer SignalCommandContainer;
 
 	#region MonoBehaviour
 
@@ -21,8 +21,8 @@ public abstract class Context :
 			mainContext = this;
 
 			var reflector = new Reflector();
-			container = new DiContainer(reflector);
-			signalCommandContainer = new SignalCommandContainer(container);
+			Container = new DiContainer(reflector);
+			SignalCommandContainer = new SignalCommandContainer(Container);
 		}
 
 		Initialize();
@@ -39,13 +39,13 @@ public abstract class Context :
 
 		if (mainContext == this)
 		{
-			signalCommandContainer.UnbindAll();
-			container.UnbindAll();
+			SignalCommandContainer.UnbindAll();
+			Container.UnbindAll();
 		}
 		else
 		{
-			signalCommandContainer.Unbind(LifeTime.Local);
-			container.Unbind(LifeTime.Local);
+			SignalCommandContainer.Unbind(LifeTime.Local);
+			Container.Unbind(LifeTime.Local);
 		}
 	}
 

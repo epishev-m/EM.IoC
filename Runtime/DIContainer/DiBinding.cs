@@ -65,7 +65,6 @@ public sealed class DiBinding :
 		Requires.ReferenceType(instance.GetType(), nameof(instance));
 
 		var instanceProvider = new InstanceProvider(instance);
-
 		var unused = base.To(instanceProvider);
 	}
 
@@ -113,7 +112,6 @@ public sealed class DiBinding :
 		var instanceProvider = value as IInstanceProvider;
 		instanceProvider = new InstanceProviderSingleton(instanceProvider);
 		RemoveAllValues();
-
 		var unused = base.To(instanceProvider);
 	}
 

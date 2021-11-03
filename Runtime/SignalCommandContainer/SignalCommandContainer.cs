@@ -13,6 +13,10 @@ public sealed class SignalCommandContainer :
 	{
 		var signal = Container.GetInstance<T>();
 
+		Requires.ValidOperation(signal != null, this, nameof(Bind));
+
+		signal?.AddListener(ReactTo);
+
 		return Bind(signal) as ISignalCommandBindingLifeTime;
 	}
 
@@ -45,15 +49,6 @@ public sealed class SignalCommandContainer :
 		object name)
 	{
 		return new SignalCommandBinding(this, key, name, BindingResolver);
-	}
-
-	protected override void BindingResolver(
-		IBinding binding)
-	{
-		base.BindingResolver(binding);
-
-		var signal = (ISignal) binding.Key;
-		signal.AddListener(ReactTo);
 	}
 
 	#endregion

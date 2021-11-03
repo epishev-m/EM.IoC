@@ -58,7 +58,7 @@ internal sealed class SignalCommandContainerTests
 		{
 			var unused = signalCommandContainer.Bind<SignalFakeTest>();
 		}
-		catch (ArgumentNullException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}

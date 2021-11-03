@@ -56,9 +56,13 @@ public abstract class Context :
 
 	protected abstract void Initialize();
 
-	protected abstract void Release();
+	protected virtual void Release()
+	{
+	}
 
-	protected abstract void Run();
+	protected virtual void Run()
+	{
+	}
 
 	#endregion
 }

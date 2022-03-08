@@ -704,7 +704,7 @@ internal sealed class DiBindingTests
 				typeof(A)
 			};
 
-			return new ReflectionInfo(constructorInfo, types);
+			return new ReflectionInfo(constructorInfo, types, null, null);
 		}
 	}
 
@@ -732,6 +732,11 @@ internal sealed class DiBindingTests
 
 		public T GetInstance<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Inject(object obj)
 		{
 			throw new NotImplementedException();
 		}

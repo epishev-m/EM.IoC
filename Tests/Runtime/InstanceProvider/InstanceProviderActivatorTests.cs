@@ -127,7 +127,7 @@ internal sealed class InstanceProviderActivatorTests
 				typeof(A)
 			};
 
-			return new ReflectionInfo(constructorInfo, types);
+			return new ReflectionInfo(constructorInfo, types, null, null);
 		}
 	}
 
@@ -155,6 +155,11 @@ internal sealed class InstanceProviderActivatorTests
 
 		public T GetInstance<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Inject(object type)
 		{
 			throw new NotImplementedException();
 		}

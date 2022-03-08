@@ -6,8 +6,7 @@ public interface IReflector
 {
 	IReflectionInfo GetReflectionInfo<T>();
 
-	IReflectionInfo GetReflectionInfo(
-		Type type);
+	IReflectionInfo GetReflectionInfo(Type type);
 }
 
 }

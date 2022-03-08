@@ -10,11 +10,12 @@ internal sealed class ReflectionInfoTests
 	{
 		// Arrange
 		var actual = false;
+		var methodsParams = typeof(Test).GetMethods();
 
 		// Act
 		try
 		{
-			var unused = new ReflectionInfo(null, new List<Type>());
+			var unused = new ReflectionInfo(null, new List<Type>(), null, null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -30,12 +31,12 @@ internal sealed class ReflectionInfoTests
 	{
 		// Arrange
 		var actual = false;
-		var param = typeof(Test).GetConstructor(new Type[0]);
+		var param = typeof(Test).GetConstructor(Type.EmptyTypes);
 
 		// Act
 		try
 		{
-			var unused = new ReflectionInfo(param, null);
+			var unused = new ReflectionInfo(param, null, null, null);
 		}
 		catch (ArgumentNullException)
 		{

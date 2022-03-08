@@ -9,19 +9,17 @@ internal sealed class ReflectorTests
 	#region Exception
 
 	[Test]
-	public void Reflector_GetReflectionInfo_ExceptionNoConstructor()
+	public void Reflector_ConstructorParam1_Exception()
 	{
 		// Arrange
 		var actual = false;
-		var type = typeof(TestNoConstructor);
-		var reflector = new Reflector();
 
 		// Act
 		try
 		{
-			var unused = reflector.GetReflectionInfo(type);
+			var unused = new Reflector(null);
 		}
-		catch (InvalidOperationException)
+		catch (ArgumentNullException)
 		{
 			actual = true;
 		}
@@ -36,33 +34,12 @@ internal sealed class ReflectorTests
 		// Arrange
 		var actual = false;
 		var type = typeof(TestManyConstructors);
-		var reflector = new Reflector();
+		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
 
 		// Act
 		try
 		{
 			var unused = reflector.GetReflectionInfo(type);
-		}
-		catch (InvalidOperationException)
-		{
-			actual = true;
-		}
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	[Test]
-	public void Reflector_GetReflectionInfoGeneric_ExceptionNoConstructor()
-	{
-		// Arrange
-		var actual = false;
-		var reflector = new Reflector();
-
-		// Act
-		try
-		{
-			var unused = reflector.GetReflectionInfo<TestNoConstructor>();
 		}
 		catch (InvalidOperationException)
 		{
@@ -78,7 +55,7 @@ internal sealed class ReflectorTests
 	{
 		// Arrange
 		var actual = false;
-		var reflector = new Reflector();
+		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
 
 		// Act
 		try
@@ -102,11 +79,11 @@ internal sealed class ReflectorTests
 	{
 		// Arrange
 		var type = typeof(Test);
-		var reflector = new Reflector();
+		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
 
 		// Act
 		var reflectionInfo = reflector.GetReflectionInfo(type);
-		var actual = reflectionInfo.ParameterTypes.Count();
+		var actual = reflectionInfo.ConstructorParametersTypes.Count();
 
 		// Assert
 		Assert.AreEqual(2, actual);
@@ -116,11 +93,11 @@ internal sealed class ReflectorTests
 	public void Reflector_GetReflectionInfoGeneric_CountParams()
 	{
 		// Arrange
-		var reflector = new Reflector();
+		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
 
 		// Act
 		var reflectionInfo = reflector.GetReflectionInfo<Test>();
-		var actual = reflectionInfo.ParameterTypes.Count();
+		var actual = reflectionInfo.ConstructorParametersTypes.Count();
 
 		// Assert
 		Assert.AreEqual(2, actual);
@@ -137,14 +114,6 @@ internal sealed class ReflectorTests
 		}
 	}
 
-	[SuppressMessage("ReSharper", "ConvertToStaticClass")]
-	private sealed class TestNoConstructor
-	{
-		private TestNoConstructor()
-		{
-		}
-	}
-
 	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	private sealed class TestManyConstructors
@@ -156,6 +125,11 @@ internal sealed class ReflectorTests
 		public TestManyConstructors(int param1, int param2)
 		{
 		}
+	}
+
+	private sealed class TestPostConstructorAttribute :
+		Attribute
+	{
 	}
 
 	#endregion

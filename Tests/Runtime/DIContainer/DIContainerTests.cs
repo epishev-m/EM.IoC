@@ -255,7 +255,7 @@ internal sealed class DiContainerTests
 				typeof(TestParam)
 			};
 
-			return new ReflectionInfo(constructorInfo, types);
+			return new ReflectionInfo(constructorInfo, types, null, null);
 		}
 	}
 

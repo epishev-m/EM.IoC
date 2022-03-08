@@ -19,9 +19,13 @@ public sealed class InstanceProviderActivator :
 	public object GetInstance()
 	{
 		var reflectionInfo = reflector.GetReflectionInfo(type);
-		var argsList = new List<object>(8);
-		argsList.AddRange(reflectionInfo.ParameterTypes.Select(t => diContainer.GetInstance(t)));
-		var instance = Activator.CreateInstance(type, argsList.ToArray());
+
+		Requires.NotNull(reflectionInfo.ConstructorInfo, nameof(reflectionInfo.ConstructorInfo));
+
+		var args = reflectionInfo.ConstructorParametersTypes
+			.Select(t => diContainer.GetInstance(t))
+			.ToArray();
+		var instance = Activator.CreateInstance(type, args);
 
 		return instance;
 	}
@@ -29,8 +33,7 @@ public sealed class InstanceProviderActivator :
 	#endregion
 	#region InstanceProviderActivator
 
-	public InstanceProviderActivator(
-		Type type,
+	public InstanceProviderActivator(Type type,
 		IReflector reflector,
 		IDiContainer diContainer)
 	{

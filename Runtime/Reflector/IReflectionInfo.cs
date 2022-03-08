@@ -11,7 +11,17 @@ public interface IReflectionInfo
 		get;
 	}
 
-	IEnumerable<Type> ParameterTypes
+	IEnumerable<Type> ConstructorParametersTypes
+	{
+		get;
+	}
+
+	MethodInfo PostConstructorInfo
+	{
+		get;
+	}
+
+	IEnumerable<Type> PostConstructorParametersTypes
 	{
 		get;
 	}

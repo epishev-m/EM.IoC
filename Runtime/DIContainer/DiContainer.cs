@@ -18,8 +18,7 @@ public sealed class DiContainer :
 		return base.Bind<T>() as IDiBindingLifeTime;
 	}
 
-	public object GetInstance(
-		Type type)
+	public object GetInstance(Type type)
 	{
 		var binding = GetBinding(type);
 
@@ -35,8 +34,8 @@ public sealed class DiContainer :
 			return null;
 		}
 
-		var instanceProvider = valuesArray.First() as IInstanceProvider;
-		var result = instanceProvider?.GetInstance();
+		var instanceProvider = (IInstanceProvider) valuesArray.First();
+		var result = instanceProvider.GetInstance();
 
 		return result;
 	}
@@ -47,18 +46,37 @@ public sealed class DiContainer :
 		return GetInstance(typeof(T)) as T;
 	}
 
+	public void Inject(object obj)
+	{
+		Requires.NotNull(obj, nameof(obj));
+
+		var type = obj.GetType();
+		var reflectionInfo = reflector.GetReflectionInfo(type);
+
+		var postConstructorInfo = reflectionInfo.PostConstructorInfo;
+		var args = reflectionInfo.PostConstructorParametersTypes
+			.Select(GetInstance)
+			.ToArray();
+
+		if (postConstructorInfo == null)
+		{
+			return;
+		}
+
+		postConstructorInfo.Invoke(obj, args);
+	}
+
 	public bool Unbind<T>()
 		where T : class
 	{
 		return base.Unbind<T>();
 	}
 
-	public void Unbind(
-		LifeTime lifeTime)
+	public void Unbind(LifeTime lifeTime)
 	{
 		Unbind(binding =>
 		{
-			var diBinding = (DiBinding)binding;
+			var diBinding = (DiBinding) binding;
 			var result = diBinding.LifeTime == lifeTime;
 
 			return result;
@@ -66,20 +84,20 @@ public sealed class DiContainer :
 	}
 
 	#endregion
+
 	#region Binder
 
-	protected override IBinding GetRawBinding(
-		object key,
+	protected override IBinding GetRawBinding(object key,
 		object name)
 	{
 		return new DiBinding(reflector, this, key, name, BindingResolver);
 	}
 
 	#endregion
+
 	#region DIContainer
 
-	public DiContainer(
-		IReflector reflector)
+	public DiContainer(IReflector reflector)
 	{
 		Requires.NotNull(reflector, nameof(reflector));
 

@@ -56,8 +56,7 @@ public sealed class DiBinding :
 		return base.To(instanceProvider) as IDiBindingSingleton;
 	}
 
-	public new void To(
-		object instance)
+	public new void To(object instance)
 	{
 		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(To));
 		Requires.ValidOperation(Values == null, this, nameof(Values));
@@ -75,26 +74,21 @@ public sealed class DiBinding :
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 
 		var instanceProvider = new InstanceProviderFactory(
-			new InstanceProviderActivator(
-				typeof(T),
-				reflector,
-				container));
+			new InstanceProviderActivator(typeof(T), reflector, container));
 
 		var unused = base.To(instanceProvider);
 
 		return this;
 	}
 
-	public IDiBindingSingleton ToFactory(
-		IFactory factory)
+	public IDiBindingSingleton ToFactory(IFactory factory)
 	{
 		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(ToFactory));
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 		Requires.NotNull(factory, nameof(factory));
 
 		var instanceProvider = new InstanceProviderFactory(
-			new InstanceProvider(
-				factory));
+			new InstanceProvider(factory));
 
 		var unused = base.To(instanceProvider);
 
@@ -118,14 +112,12 @@ public sealed class DiBinding :
 	#endregion
 	#region DiBinding
 
-	public DiBinding(
-		IReflector reflector,
+	public DiBinding(IReflector reflector,
 		IDiContainer container,
 		object key,
 		object name,
 		Resolver resolver) :
-		base(
-			key,
+		base(key,
 			name,
 			resolver)
 	{

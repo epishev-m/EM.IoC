@@ -33,13 +33,14 @@ public class CommandBinding :
 	}
 
 	#endregion
+
 	#region ICommandBindingComposite
 
 	public bool IsSequence
 	{
 		get
 		{
-			var value = isSequence != null && (bool)isSequence;
+			var value = isSequence != null && (bool) isSequence;
 
 			return value;
 		}
@@ -66,6 +67,7 @@ public class CommandBinding :
 	}
 
 	#endregion
+
 	#region ICommandBinding
 
 	public new ICommandBinding To<T>()
@@ -86,21 +88,14 @@ public class CommandBinding :
 	}
 
 	#endregion
+
 	#region CommandBinding
 
-	public LifeTime LifeTime
-	{
-		get;
-		private set;
-	} = LifeTime.External;
-
-	public CommandBinding(
-		ICommandContainer container,
+	public CommandBinding(ICommandContainer container,
 		object key,
 		object name,
-		Resolver resolver) :
-		base(
-			key,
+		Resolver resolver)
+		: base(key,
 			name,
 			resolver)
 	{
@@ -108,6 +103,12 @@ public class CommandBinding :
 
 		this.container = container;
 	}
+
+	public LifeTime LifeTime
+	{
+		get;
+		private set;
+	} = LifeTime.External;
 
 	#endregion
 }

@@ -8,13 +8,13 @@ public class CommandContainer :
 	Binder,
 	ICommandContainer
 {
-	protected readonly IDiContainer Container;
+	protected readonly IDiContainer container;
 
-	private readonly Pool<CommandSequence> poolSequences;
+	private readonly Pool<CommandSequence> poolSequences = new();
 
-	private readonly Pool<CommandBatch> poolBatches;
+	private readonly Pool<CommandBatch> poolBatches = new();
 
-	private readonly Dictionary<Type, Pool<ICommand>> poolCommands;
+	private readonly Dictionary<Type, Pool<ICommand>> poolCommands = new();
 
 	#region ICommandContainer
 
@@ -23,23 +23,20 @@ public class CommandContainer :
 		return base.Bind<T>() as ICommandBindingLifeTime;
 	}
 
-	public ICommandBindingLifeTime Bind(
-		object key)
+	public ICommandBindingLifeTime Bind(object key)
 	{
 		return base.Bind(key) as ICommandBindingLifeTime;
 	}
 
-	public void ReactTo<T>(
-		object data = null)
+	public void ReactTo<T>(object data = null)
 	{
 		ReactTo(typeof(T), data);
 	}
 
-	public virtual void ReactTo(
-		object trigger,
+	public virtual void ReactTo(object trigger,
 		object data = null)
 	{
-		if (!(GetBinding(trigger) is CommandBinding binding))
+		if (GetBinding(trigger) is not CommandBinding binding)
 		{
 			return;
 		}
@@ -63,14 +60,12 @@ public class CommandContainer :
 		return base.Unbind<T>();
 	}
 
-	public bool Unbind(
-		object key)
+	public bool Unbind(object key)
 	{
 		return base.Unbind(key);
 	}
 
-	public void Unbind(
-		LifeTime lifeTime)
+	public void Unbind(LifeTime lifeTime)
 	{
 		Unbind(binding =>
 		{
@@ -81,31 +76,27 @@ public class CommandContainer :
 	}
 
 	#endregion
+
 	#region Binder
 
-	protected override IBinding GetRawBinding(
-		object key,
+	protected override IBinding GetRawBinding(object key,
 		object name)
 	{
 		return new CommandBinding(this, key, name, BindingResolver);
 	}
 
 	#endregion
+
 	#region CommandContainer
 
-	public CommandContainer(
-		IDiContainer container)
+	public CommandContainer(IDiContainer container)
 	{
 		Requires.NotNull(container, nameof(container));
 
-		Container = container;
-		poolSequences = new Pool<CommandSequence>();
-		poolBatches = new Pool<CommandBatch>();
-		poolCommands = new Dictionary<Type, Pool<ICommand>>();
+		this.container = container;
 	}
 
-	private void PutComposite(
-		ICommandComposite composite,
+	private void PutComposite(ICommandComposite composite,
 		bool isSequence)
 	{
 		PutCommands(composite.Commands);
@@ -136,8 +127,7 @@ public class CommandContainer :
 		return batch;
 	}
 
-	private ICommand GetCommand(
-		Type commandType)
+	private ICommand GetCommand(Type commandType)
 	{
 		var command = default(ICommand);
 
@@ -151,13 +141,12 @@ public class CommandContainer :
 			poolCommands.Add(commandType, pool);
 		}
 
-		command ??= Container.GetInstance(commandType) as ICommand;
+		command ??= container.GetInstance(commandType) as ICommand;
 
 		return command;
 	}
 
-	private void PutCommands(
-		IEnumerable<ICommand> commands)
+	private void PutCommands(IEnumerable<ICommand> commands)
 	{
 		foreach (var command in commands)
 		{

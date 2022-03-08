@@ -150,6 +150,27 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	[Test]
+	public void SignalCommandContainer_Unbind_SignalRelease()
+	{
+		// Arrange
+		var container = new DiContainer();
+		var commandContainer = new SignalCommandContainer(container);
+		var signal = container.GetInstance<SignalTest>();
+
+		commandContainer.Bind<SignalTest>()
+			.InGlobal()
+			.InParallel()
+			.To<CommandTest>();
+
+		// Act
+		commandContainer.Unbind<SignalTest>();
+		var actual = signal.Dispatch();
+
+		//Assert
+		Assert.IsFalse(actual);
+	}
+
+	[Test]
 	public void SignalCommandContainer_UnbindAll()
 	{
 		// Arrange
@@ -167,6 +188,27 @@ internal sealed class SignalCommandContainerTests
 
 		//Assert
 		Assert.AreNotEqual(expected, actual);
+	}
+
+	[Test]
+	public void SignalCommandContainer_UnbindAll_SignalRelease()
+	{
+		// Arrange
+		var container = new DiContainer();
+		var commandContainer = new SignalCommandContainer(container);
+		var signal = container.GetInstance<SignalTest>();
+
+		var unused = commandContainer.Bind<SignalTest>()
+			.InGlobal()
+			.InParallel()
+			.To<CommandTest>();
+
+		// Act
+		commandContainer.UnbindAll();
+		var actual = signal.Dispatch();
+
+		//Assert
+		Assert.IsFalse(actual);
 	}
 
 	[Test]
@@ -207,6 +249,27 @@ internal sealed class SignalCommandContainerTests
 
 		//Assert
 		Assert.AreEqual(expected, actual);
+	}
+
+	[Test]
+	public void SignalCommandContainer_UnbindLifeTime_SignalRelease()
+	{
+		// Arrange
+		var container = new DiContainer();
+		var commandContainer = new SignalCommandContainer(container);
+		var signal = container.GetInstance<SignalTest>();
+
+		var unused = commandContainer.Bind<SignalTest>()
+			.InLocal()
+			.InParallel()
+			.To<CommandTest>();
+
+		// Act
+		commandContainer.Unbind(LifeTime.Local);
+		var actual = signal.Dispatch();
+
+		//Assert
+		Assert.IsFalse(actual);
 	}
 
 	#endregion
@@ -268,8 +331,7 @@ internal sealed class SignalCommandContainerTests
 			throw new NotImplementedException();
 		}
 
-		public object GetInstance(
-			Type type)
+		public object GetInstance(Type type)
 		{
 			return new CommandTest();
 		}
@@ -278,6 +340,11 @@ internal sealed class SignalCommandContainerTests
 			where T : class
 		{
 			return signal as T;
+		}
+
+		public void Inject(object obj)
+		{
+			throw new NotImplementedException();
 		}
 
 		public bool Unbind<T>()

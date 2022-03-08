@@ -1,6 +1,7 @@
 ﻿namespace EM.IoC
 {
 using Foundation;
+using BindingKey = System.ValueTuple<object, object>;
 
 public sealed class SignalCommandContainer :
 	CommandContainer,
@@ -11,11 +12,11 @@ public sealed class SignalCommandContainer :
 	public new ISignalCommandBindingLifeTime Bind<T>()
 		where T : class, ISignal
 	{
-		var signal = Container.GetInstance<T>();
+		var signal = container.GetInstance<T>();
 
 		Requires.ValidOperation(signal != null, this, nameof(Bind));
 
-		signal?.AddListener(ReactTo);
+		signal.AddListener(ReactTo);
 
 		return Bind(signal) as ISignalCommandBindingLifeTime;
 	}
@@ -23,7 +24,7 @@ public sealed class SignalCommandContainer :
 	public new bool Unbind<T>()
 		where T : class, ISignal
 	{
-		var signal = Container.GetInstance<T>();
+		var signal = container.GetInstance<T>();
 		signal.RemoveListener(ReactTo);
 
 		return Unbind(signal);

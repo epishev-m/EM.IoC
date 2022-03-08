@@ -10,8 +10,7 @@ public interface ISignalCommandContainer
 	bool Unbind<T>()
 		where T : class, ISignal;
 
-	void Unbind(
-		LifeTime lifeTime);
+	void Unbind(LifeTime lifeTime);
 
 	void UnbindAll();
 }

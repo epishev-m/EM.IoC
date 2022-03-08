@@ -319,14 +319,18 @@ internal sealed class CommandContainerTests
 			throw new NotImplementedException();
 		}
 
-		public object GetInstance(
-			Type type)
+		public object GetInstance(Type type)
 		{
 			return new CommandTest();
 		}
 
 		public T GetInstance<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public void Inject(object obj)
 		{
 			throw new NotImplementedException();
 		}

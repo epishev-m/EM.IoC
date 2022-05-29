@@ -1,5 +1,6 @@
 ﻿namespace EM.IoC
 {
+
 using Foundation;
 
 public interface IDiBinding

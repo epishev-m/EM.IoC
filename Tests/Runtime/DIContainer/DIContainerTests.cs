@@ -44,6 +44,7 @@ internal sealed class DiContainerTests
 	}
 
 	#endregion
+
 	#region GetInstance
 
 	[Test]
@@ -105,6 +106,7 @@ internal sealed class DiContainerTests
 	}
 
 	#endregion
+
 	#region Unbind
 
 	[Test]
@@ -216,6 +218,7 @@ internal sealed class DiContainerTests
 	}
 
 	#endregion
+
 	#region Nested
 
 	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
@@ -243,13 +246,13 @@ internal sealed class DiContainerTests
 		public IReflectionInfo GetReflectionInfo(
 			Type type)
 		{
-			var constructors = type.GetConstructors(
-				BindingFlags.FlattenHierarchy |
-				BindingFlags.Public |
-				BindingFlags.Instance |
-				BindingFlags.InvokeMethod);
+			var constructors = type.GetConstructors(BindingFlags.FlattenHierarchy |
+													BindingFlags.Public |
+													BindingFlags.Instance |
+													BindingFlags.InvokeMethod);
 
 			var constructorInfo = constructors[0];
+
 			var types = new List<Type>
 			{
 				typeof(TestParam)

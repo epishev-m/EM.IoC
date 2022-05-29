@@ -28,6 +28,7 @@ internal sealed class CommandContainerTests
 	}
 
 	#endregion
+
 	#region Bind
 
 	[Test]
@@ -82,6 +83,7 @@ internal sealed class CommandContainerTests
 	}
 
 	#endregion
+
 	#region ReactTo
 
 	[Test]
@@ -116,7 +118,10 @@ internal sealed class CommandContainerTests
 		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 		var key = typeof(CommandTest);
-		CommandTest.Callback = () => { };
+
+		CommandTest.Callback = () =>
+		{
+		};
 
 		commandContainer.Bind(key)
 			.InGlobal()
@@ -162,7 +167,9 @@ internal sealed class CommandContainerTests
 		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
 
-		CommandTest.Callback = () => { };
+		CommandTest.Callback = () =>
+		{
+		};
 
 		commandContainer.Bind<CommandTest>()
 			.InGlobal()
@@ -178,6 +185,7 @@ internal sealed class CommandContainerTests
 	}
 
 	#endregion
+
 	#region Unbind
 
 	[Test]
@@ -274,6 +282,7 @@ internal sealed class CommandContainerTests
 	}
 
 	#endregion
+
 	#region Nested
 
 	private sealed class CommandTest :

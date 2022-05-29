@@ -1,5 +1,6 @@
 ﻿namespace EM.IoC
 {
+
 using Foundation;
 using System.Linq;
 
@@ -40,6 +41,7 @@ public sealed class DiBinding :
 	}
 
 	#endregion
+
 	#region IDiBinding
 
 	public new IDiBindingSingleton To<T>()
@@ -48,8 +50,7 @@ public sealed class DiBinding :
 		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(To));
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 
-		var instanceProvider = new InstanceProviderActivator(
-			typeof(T),
+		var instanceProvider = new InstanceProviderActivator(typeof(T),
 			reflector,
 			container);
 
@@ -87,8 +88,7 @@ public sealed class DiBinding :
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 		Requires.NotNull(factory, nameof(factory));
 
-		var instanceProvider = new InstanceProviderFactory(
-			new InstanceProvider(factory));
+		var instanceProvider = new InstanceProviderFactory(new InstanceProvider(factory));
 
 		var unused = base.To(instanceProvider);
 
@@ -96,6 +96,7 @@ public sealed class DiBinding :
 	}
 
 	#endregion
+
 	#region IDiBindingSingleton
 
 	public void ToSingleton()
@@ -110,13 +111,15 @@ public sealed class DiBinding :
 	}
 
 	#endregion
+
 	#region DiBinding
 
 	public DiBinding(IReflector reflector,
 		IDiContainer container,
 		object key,
 		object name,
-		Resolver resolver) :
+		Resolver resolver)
+		:
 		base(key,
 			name,
 			resolver)

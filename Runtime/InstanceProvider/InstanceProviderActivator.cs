@@ -1,5 +1,6 @@
 ﻿namespace EM.IoC
 {
+
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -25,12 +26,14 @@ public sealed class InstanceProviderActivator :
 		var args = reflectionInfo.ConstructorParametersTypes
 			.Select(t => diContainer.GetInstance(t))
 			.ToArray();
+
 		var instance = Activator.CreateInstance(type, args);
 
 		return instance;
 	}
 
 	#endregion
+
 	#region InstanceProviderActivator
 
 	public InstanceProviderActivator(Type type,

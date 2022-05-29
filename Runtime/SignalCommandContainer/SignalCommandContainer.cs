@@ -1,5 +1,6 @@
 ﻿namespace EM.IoC
 {
+
 using Foundation;
 using BindingKey = System.ValueTuple<object, object>;
 
@@ -16,7 +17,7 @@ public sealed class SignalCommandContainer :
 
 		Requires.ValidOperation(signal != null, this, nameof(Bind));
 
-		signal.AddListener(ReactTo);
+		signal?.AddListener(ReactTo);
 
 		return Bind(signal) as ISignalCommandBindingLifeTime;
 	}
@@ -31,6 +32,7 @@ public sealed class SignalCommandContainer :
 	}
 
 	#endregion
+
 	#region CommandContainer
 
 	public override void ReactTo(
@@ -53,10 +55,12 @@ public sealed class SignalCommandContainer :
 	}
 
 	#endregion
+
 	#region SignalCommandContainer
 
 	public SignalCommandContainer(
-		IDiContainer container) :
+		IDiContainer container)
+		:
 		base(container)
 	{
 	}

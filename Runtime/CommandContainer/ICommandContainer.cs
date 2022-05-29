@@ -3,27 +3,22 @@
 
 public interface ICommandContainer
 {
-	void ReactTo<T>(
-		object data = null);
+	void ReactTo<T>(object data = null);
 
-	void ReactTo(
-		object trigger,
+	void ReactTo(object trigger,
 		object data = null);
 
 	ICommandBindingLifeTime Bind<T>();
 
-	ICommandBindingLifeTime Bind(
-		object key);
+	ICommandBindingLifeTime Bind(object key);
 
 	bool Unbind<T>();
 
-	bool Unbind(
-		object key);
+	bool Unbind(object key);
 
 	void UnbindAll();
 
-	void Unbind(
-		LifeTime lifeTime);
+	void Unbind(LifeTime lifeTime);
 }
 
 }

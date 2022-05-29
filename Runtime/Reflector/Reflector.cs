@@ -1,11 +1,11 @@
-﻿using EM.Foundation;
-
-namespace EM.IoC
+﻿namespace EM.IoC
 {
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Foundation;
 
 public sealed class Reflector :
 	IReflector
@@ -42,8 +42,11 @@ public sealed class Reflector :
 				postConstructorParametersTypes = postConstructorParameters.Select(param => param.ParameterType);
 			}
 
-			reflectionInfo = new ReflectionInfo(constructorInfo, constructorParametersTypes,
-				postConstructorInfo, postConstructorParametersTypes);
+			reflectionInfo = new ReflectionInfo(constructorInfo,
+				constructorParametersTypes,
+				postConstructorInfo,
+				postConstructorParametersTypes);
+
 			reflectionInfoCache.Add(type, reflectionInfo);
 		}
 
@@ -51,6 +54,7 @@ public sealed class Reflector :
 	}
 
 	#endregion
+
 	#region Reflector
 
 	public Reflector(Type postConstructorAttributeType)
@@ -63,11 +67,10 @@ public sealed class Reflector :
 
 	private static ConstructorInfo GetConstructorInfo(Type type)
 	{
-		var constructors = type.GetConstructors(
-			BindingFlags.FlattenHierarchy |
-			BindingFlags.Public |
-			BindingFlags.Instance |
-			BindingFlags.InvokeMethod);
+		var constructors = type.GetConstructors(BindingFlags.FlattenHierarchy |
+												BindingFlags.Public |
+												BindingFlags.Instance |
+												BindingFlags.InvokeMethod);
 
 		var result = constructors.Length switch
 		{
@@ -79,14 +82,15 @@ public sealed class Reflector :
 		return result;
 	}
 
-	private bool TryGetPostConstructorInfo(Type type, out MethodInfo postConstructor)
+	private bool TryGetPostConstructorInfo(Type type,
+		out MethodInfo postConstructor)
 	{
 		var postConstructorCached = default(MethodInfo);
-		var methods = type.GetMethods(
-			BindingFlags.FlattenHierarchy |
-			BindingFlags.NonPublic |
-			BindingFlags.Instance |
-			BindingFlags.InvokeMethod);
+
+		var methods = type.GetMethods(BindingFlags.FlattenHierarchy |
+									BindingFlags.NonPublic |
+									BindingFlags.Instance |
+									BindingFlags.InvokeMethod);
 
 		foreach (var methodInfo in methods)
 		{

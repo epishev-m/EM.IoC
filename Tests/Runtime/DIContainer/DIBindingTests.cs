@@ -78,6 +78,7 @@ internal sealed class DiBindingTests
 	}
 
 	#endregion
+
 	#region LifeTime
 
 	[Test]
@@ -166,6 +167,7 @@ internal sealed class DiBindingTests
 	}
 
 	#endregion
+
 	#region To
 
 	[Test]
@@ -414,6 +416,7 @@ internal sealed class DiBindingTests
 	}
 
 	#endregion
+
 	#region ToFactory
 
 	[Test]
@@ -587,6 +590,7 @@ internal sealed class DiBindingTests
 	}
 
 	#endregion
+
 	#region ToSingleton
 
 	[Test]
@@ -653,6 +657,7 @@ internal sealed class DiBindingTests
 	}
 
 	#endregion
+
 	#region Nested
 
 	private sealed class TestFactory :
@@ -692,13 +697,13 @@ internal sealed class DiBindingTests
 		public IReflectionInfo GetReflectionInfo(
 			Type type)
 		{
-			var constructors = type.GetConstructors(
-				BindingFlags.FlattenHierarchy |
-				BindingFlags.Public |
-				BindingFlags.Instance |
-				BindingFlags.InvokeMethod);
+			var constructors = type.GetConstructors(BindingFlags.FlattenHierarchy |
+													BindingFlags.Public |
+													BindingFlags.Instance |
+													BindingFlags.InvokeMethod);
 
 			var constructorInfo = constructors[0];
+
 			var types = new List<Type>
 			{
 				typeof(A)

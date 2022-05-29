@@ -52,6 +52,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	#endregion
+
 	#region Composite
 
 	[Test]
@@ -137,6 +138,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	#endregion
+
 	#region Composite
 
 	[Test]
@@ -272,6 +274,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	#endregion
+
 	#region Once
 
 	[Test]
@@ -291,6 +294,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	#endregion
+
 	#region To
 
 	[Test]
@@ -361,6 +365,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	#endregion
+
 	#region Execute
 
 	[Test]
@@ -392,6 +397,7 @@ internal sealed class SignalCommandBindingTests
 
 		// Act
 		var binder = new SignalCommandBinding(container, key, null, null);
+
 		binder.InGlobal()
 			.InParallel()
 			.To<CommandTest>()
@@ -404,6 +410,7 @@ internal sealed class SignalCommandBindingTests
 	}
 
 	#endregion
+
 	#region Nested
 
 	private sealed class CommandContainerTest :
@@ -425,6 +432,7 @@ internal sealed class SignalCommandBindingTests
 		}
 
 		#endregion
+
 		#region ICommandContainer
 
 		ICommandBindingLifeTime ICommandContainer.Bind<T>()
@@ -442,7 +450,8 @@ internal sealed class SignalCommandBindingTests
 			throw new NotImplementedException();
 		}
 
-		public void ReactTo(object trigger, object data = null)
+		public void ReactTo(object trigger,
+			object data = null)
 		{
 			IsExecuted = true;
 		}
@@ -468,6 +477,7 @@ internal sealed class SignalCommandBindingTests
 		}
 
 		#endregion
+
 		#region CommandContainerTest
 
 		public bool IsExecuted { get; private set; }

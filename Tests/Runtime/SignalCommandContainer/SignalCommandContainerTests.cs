@@ -29,6 +29,7 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	#endregion
+
 	#region Bind
 
 	[Test]
@@ -68,6 +69,7 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	#endregion
+
 	#region ReactTo
 
 	[Test]
@@ -98,7 +100,10 @@ internal sealed class SignalCommandContainerTests
 		var expected = new Test();
 		var container = new DiContainer();
 		var commandContainer = new CommandContainer(container);
-		CommandTest.Callback = () => { };
+
+		CommandTest.Callback = () =>
+		{
+		};
 
 		// Act
 		commandContainer.Bind<SignalTest>()
@@ -114,6 +119,7 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	#endregion
+
 	#region Unbind
 
 	[Test]
@@ -273,6 +279,7 @@ internal sealed class SignalCommandContainerTests
 	}
 
 	#endregion
+
 	#region Nested
 
 	private sealed class SignalTest : SignalEx
@@ -293,6 +300,7 @@ internal sealed class SignalCommandContainerTests
 		public static Test DataTest;
 
 		#endregion
+
 		#region ICommand
 
 		public object Data

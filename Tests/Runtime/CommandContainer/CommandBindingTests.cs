@@ -52,6 +52,7 @@ internal sealed class CommandBindingTests
 	}
 
 	#endregion
+
 	#region LifeTime
 
 	[Test]
@@ -135,6 +136,7 @@ internal sealed class CommandBindingTests
 	}
 
 	#endregion
+
 	#region Composite
 
 	[Test]
@@ -265,6 +267,7 @@ internal sealed class CommandBindingTests
 	}
 
 	#endregion
+
 	#region To
 
 	[Test]
@@ -304,6 +307,7 @@ internal sealed class CommandBindingTests
 			.InParallel()
 			.To<CommandTest>()
 			.To<CommandTest>();
+
 		var values = binder.Values;
 		var actual = values.Count();
 
@@ -324,6 +328,7 @@ internal sealed class CommandBindingTests
 			.InSequence()
 			.To<CommandTest>()
 			.To<CommandTest>();
+
 		var values = binder.Values;
 		var actual = values.Count();
 
@@ -332,6 +337,7 @@ internal sealed class CommandBindingTests
 	}
 
 	#endregion
+
 	#region Execute
 
 	[Test]
@@ -375,6 +381,7 @@ internal sealed class CommandBindingTests
 	}
 
 	#endregion
+
 	#region Nested
 
 	private sealed class CommandContainerTest :
@@ -397,7 +404,8 @@ internal sealed class CommandBindingTests
 			throw new NotImplementedException();
 		}
 
-		public void ReactTo(object trigger, object data = null)
+		public void ReactTo(object trigger,
+			object data = null)
 		{
 			IsExecuted = true;
 		}
@@ -423,6 +431,7 @@ internal sealed class CommandBindingTests
 		}
 
 		#endregion
+
 		#region CommandContainerTest
 
 		public bool IsExecuted { get; private set; }

@@ -1,5 +1,6 @@
 ﻿namespace EM.IoC
 {
+
 using Foundation;
 using System;
 using System.Linq;
@@ -27,14 +28,14 @@ public sealed class DiContainer :
 			return null;
 		}
 
-		var valuesArray = binding.Values.ToArray();
+		var values = binding.Values.ToArray();
 
-		if (valuesArray.Length <= 0)
+		if (!values.Any())
 		{
 			return null;
 		}
 
-		var instanceProvider = (IInstanceProvider) valuesArray.First();
+		var instanceProvider = (IInstanceProvider) values.First();
 		var result = instanceProvider.GetInstance();
 
 		return result;
@@ -54,6 +55,7 @@ public sealed class DiContainer :
 		var reflectionInfo = reflector.GetReflectionInfo(type);
 
 		var postConstructorInfo = reflectionInfo.PostConstructorInfo;
+
 		var args = reflectionInfo.PostConstructorParametersTypes
 			.Select(GetInstance)
 			.ToArray();

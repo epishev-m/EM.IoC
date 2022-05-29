@@ -1,5 +1,6 @@
 ﻿namespace EM.IoC
 {
+
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,7 @@ public sealed class ReflectionInfo :
 	}
 
 	#endregion
+
 	#region ReflectionInfo
 
 	public ReflectionInfo(

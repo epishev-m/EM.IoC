@@ -55,4 +55,3 @@ internal sealed class ReflectionInfoTests
 
 	#endregion
 }
-

@@ -72,6 +72,7 @@ internal sealed class ReflectorTests
 	}
 
 	#endregion
+
 	#region GetReflectionInfo
 
 	[Test]
@@ -104,12 +105,14 @@ internal sealed class ReflectorTests
 	}
 
 	#endregion
+
 	#region Nested
 
 	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	private sealed class Test
 	{
-		public Test(int param1, int param2)
+		public Test(int param1,
+			int param2)
 		{
 		}
 	}
@@ -122,7 +125,8 @@ internal sealed class ReflectorTests
 		{
 		}
 
-		public TestManyConstructors(int param1, int param2)
+		public TestManyConstructors(int param1,
+			int param2)
 		{
 		}
 	}

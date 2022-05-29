@@ -1,5 +1,6 @@
 ﻿namespace EM.IoC
 {
+
 using Foundation;
 
 public sealed class SignalCommandBinding :
@@ -21,6 +22,7 @@ public sealed class SignalCommandBinding :
 	}
 
 	#endregion
+
 	#region ISignalCommandBindingOnce
 
 	public bool IsOneOff
@@ -47,6 +49,7 @@ public sealed class SignalCommandBinding :
 	}
 
 	#endregion
+
 	#region ISignalCommandBinding
 
 	public new ISignalCommandBinding To<T>()
@@ -56,15 +59,16 @@ public sealed class SignalCommandBinding :
 	}
 
 	#endregion
+
 	#region SignalCommandBinding
 
 	public SignalCommandBinding(
 		ICommandContainer container,
 		object key,
 		object name,
-		Resolver resolver) :
-		base(
-			container,
+		Resolver resolver)
+		:
+		base(container,
 			key,
 			name,
 			resolver)

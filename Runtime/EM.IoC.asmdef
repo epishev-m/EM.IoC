@@ -1,7 +1,9 @@
 {
     "name": "EM.IoC",
+    "rootNamespace": "",
     "references": [
-        "EM.Foundation"
+        "EM.Foundation",
+        "UniTask"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

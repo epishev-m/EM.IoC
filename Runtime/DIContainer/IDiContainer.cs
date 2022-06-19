@@ -2,6 +2,7 @@
 {
 
 using System;
+using Foundation;
 
 public interface IDiContainer
 {

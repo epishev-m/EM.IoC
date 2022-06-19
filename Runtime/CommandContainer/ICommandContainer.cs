@@ -1,6 +1,8 @@
 ﻿namespace EM.IoC
 {
 
+using Foundation;
+
 public interface ICommandContainer
 {
 	void ReactTo<T>(object data = null);

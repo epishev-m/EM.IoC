@@ -1,6 +1,8 @@
 ﻿namespace EM.IoC
 {
 
+using Foundation;
+
 public interface IDiBindingLifeTime
 {
 	LifeTime LifeTime

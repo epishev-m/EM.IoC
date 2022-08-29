@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 internal sealed class ReflectionInfoTests
 {
@@ -10,12 +11,11 @@ internal sealed class ReflectionInfoTests
 	{
 		// Arrange
 		var actual = false;
-		var methodsParams = typeof(Test).GetMethods();
 
 		// Act
 		try
 		{
-			var unused = new ReflectionInfo(null, new List<Type>(), null, null);
+			var unused = new ReflectionInfo(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -27,18 +27,19 @@ internal sealed class ReflectionInfoTests
 	}
 
 	[Test]
-	public void ReflectionInfo_ConstructorParam2_Exception()
+	public void ReflectionInfo_ConstructorInfo_ExceptionManyConstructors()
 	{
 		// Arrange
 		var actual = false;
-		var param = typeof(Test).GetConstructor(Type.EmptyTypes);
+		var type = typeof(TestManyConstructors);
 
 		// Act
 		try
 		{
-			var unused = new ReflectionInfo(param, null, null, null);
+			var reflectionInfo = new ReflectionInfo(type);
+			var unused = reflectionInfo.ConstructorInfo;
 		}
-		catch (ArgumentNullException)
+		catch (InvalidOperationException)
 		{
 			actual = true;
 		}
@@ -49,8 +50,18 @@ internal sealed class ReflectionInfoTests
 
 	#region Nested
 
-	private sealed class Test
+	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+	[SuppressMessage("ReSharper", "UnusedMember.Local")]
+	private sealed class TestManyConstructors
 	{
+		public TestManyConstructors(int param)
+		{
+		}
+
+		public TestManyConstructors(int param1,
+			int param2)
+		{
+		}
 	}
 
 	#endregion

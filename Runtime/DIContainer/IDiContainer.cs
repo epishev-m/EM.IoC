@@ -11,8 +11,6 @@ public interface IDiContainer
 	T GetInstance<T>()
 		where T : class;
 
-	void Inject(object obj);
-
 	IDiBindingLifeTime Bind<T>()
 		where T : class;
 

@@ -9,7 +9,7 @@ public sealed class DiContainer :
 	Binder,
 	IDiContainer
 {
-	private readonly IReflector reflector;
+	private readonly IReflector _reflector;
 
 	#region IDiContainer
 
@@ -47,27 +47,6 @@ public sealed class DiContainer :
 		return GetInstance(typeof(T)) as T;
 	}
 
-	public void Inject(object obj)
-	{
-		Requires.NotNull(obj, nameof(obj));
-
-		var type = obj.GetType();
-		var reflectionInfo = reflector.GetReflectionInfo(type);
-
-		var postConstructorInfo = reflectionInfo.PostConstructorInfo;
-
-		var args = reflectionInfo.PostConstructorParametersTypes
-			.Select(GetInstance)
-			.ToArray();
-
-		if (postConstructorInfo == null)
-		{
-			return;
-		}
-
-		postConstructorInfo.Invoke(obj, args);
-	}
-
 	public bool Unbind<T>()
 		where T : class
 	{
@@ -92,7 +71,7 @@ public sealed class DiContainer :
 	protected override IBinding GetRawBinding(object key,
 		object name)
 	{
-		return new DiBinding(reflector, this, key, name, BindingResolver);
+		return new DiBinding(_reflector, this, key, name, BindingResolver);
 	}
 
 	#endregion
@@ -103,7 +82,7 @@ public sealed class DiContainer :
 	{
 		Requires.NotNull(reflector, nameof(reflector));
 
-		this.reflector = reflector;
+		_reflector = reflector;
 	}
 
 	#endregion

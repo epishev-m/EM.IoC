@@ -113,22 +113,9 @@ internal sealed class InstanceProviderActivatorTests
 			return GetReflectionInfo(typeof(T));
 		}
 
-		public IReflectionInfo GetReflectionInfo(
-			Type type)
+		public IReflectionInfo GetReflectionInfo(Type type)
 		{
-			var constructors = type.GetConstructors(
-				BindingFlags.FlattenHierarchy |
-				BindingFlags.Public |
-				BindingFlags.Instance |
-				BindingFlags.InvokeMethod);
-
-			var constructorInfo = constructors[0];
-			var types = new List<Type>
-			{
-				typeof(A)
-			};
-
-			return new ReflectionInfo(constructorInfo, types, null, null);
+			return new ReflectionInfo(type);
 		}
 	}
 

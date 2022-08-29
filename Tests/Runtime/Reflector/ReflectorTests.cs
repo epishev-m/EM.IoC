@@ -6,73 +6,6 @@ using System.Linq;
 
 internal sealed class ReflectorTests
 {
-	#region Exception
-
-	[Test]
-	public void Reflector_ConstructorParam1_Exception()
-	{
-		// Arrange
-		var actual = false;
-
-		// Act
-		try
-		{
-			var unused = new Reflector(null);
-		}
-		catch (ArgumentNullException)
-		{
-			actual = true;
-		}
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	[Test]
-	public void Reflector_GetReflectionInfo_ExceptionManyConstructors()
-	{
-		// Arrange
-		var actual = false;
-		var type = typeof(TestManyConstructors);
-		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
-
-		// Act
-		try
-		{
-			var unused = reflector.GetReflectionInfo(type);
-		}
-		catch (InvalidOperationException)
-		{
-			actual = true;
-		}
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	[Test]
-	public void Reflector_GetReflectionInfoGeneric_ExceptionManyConstructors()
-	{
-		// Arrange
-		var actual = false;
-		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
-
-		// Act
-		try
-		{
-			var unused = reflector.GetReflectionInfo<TestManyConstructors>();
-		}
-		catch (InvalidOperationException)
-		{
-			actual = true;
-		}
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	#endregion
-
 	#region GetReflectionInfo
 
 	[Test]
@@ -80,7 +13,7 @@ internal sealed class ReflectorTests
 	{
 		// Arrange
 		var type = typeof(Test);
-		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
+		var reflector = new Reflector();
 
 		// Act
 		var reflectionInfo = reflector.GetReflectionInfo(type);
@@ -94,7 +27,7 @@ internal sealed class ReflectorTests
 	public void Reflector_GetReflectionInfoGeneric_CountParams()
 	{
 		// Arrange
-		var reflector = new Reflector(typeof(TestPostConstructorAttribute));
+		var reflector = new Reflector();
 
 		// Act
 		var reflectionInfo = reflector.GetReflectionInfo<Test>();
@@ -115,25 +48,6 @@ internal sealed class ReflectorTests
 			int param2)
 		{
 		}
-	}
-
-	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
-	[SuppressMessage("ReSharper", "UnusedMember.Local")]
-	private sealed class TestManyConstructors
-	{
-		public TestManyConstructors(int param)
-		{
-		}
-
-		public TestManyConstructors(int param1,
-			int param2)
-		{
-		}
-	}
-
-	private sealed class TestPostConstructorAttribute :
-		Attribute
-	{
 	}
 
 	#endregion

@@ -95,8 +95,7 @@ internal sealed class InstanceProviderActivatorTests
 	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	private sealed class Test
 	{
-		public Test(
-			A param)
+		public Test(A param)
 		{
 		}
 	}
@@ -128,8 +127,7 @@ internal sealed class InstanceProviderActivatorTests
 			throw new NotImplementedException();
 		}
 
-		public object GetInstance(
-			Type type)
+		public object GetInstance(Type type)
 		{
 			var result = default(object);
 
@@ -143,11 +141,6 @@ internal sealed class InstanceProviderActivatorTests
 
 		public T GetInstance<T>()
 			where T : class
-		{
-			throw new NotImplementedException();
-		}
-
-		public void Inject(object type)
 		{
 			throw new NotImplementedException();
 		}

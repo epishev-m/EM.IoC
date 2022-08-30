@@ -10,9 +10,9 @@ public sealed class DiBinding :
 	IDiBinding,
 	IDiBindingLifeTime
 {
-	private readonly IReflector reflector;
+	private readonly IReflector _reflector;
 
-	private readonly IDiContainer container;
+	private readonly IDiContainer _container;
 
 	#region IDiBindingLifeTime
 
@@ -51,8 +51,8 @@ public sealed class DiBinding :
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 
 		var instanceProvider = new InstanceProviderActivator(typeof(T),
-			reflector,
-			container);
+			_reflector,
+			_container);
 
 		return base.To(instanceProvider) as IDiBindingSingleton;
 	}
@@ -75,7 +75,7 @@ public sealed class DiBinding :
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 
 		var instanceProvider = new InstanceProviderFactory(
-			new InstanceProviderActivator(typeof(T), reflector, container));
+			new InstanceProviderActivator(typeof(T), _reflector, _container));
 
 		var unused = base.To(instanceProvider);
 
@@ -127,8 +127,8 @@ public sealed class DiBinding :
 		Requires.NotNull(reflector, nameof(reflector));
 		Requires.NotNull(container, nameof(container));
 
-		this.container = container;
-		this.reflector = reflector;
+		_container = container;
+		_reflector = reflector;
 	}
 
 	#endregion

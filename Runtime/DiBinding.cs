@@ -24,7 +24,7 @@ public sealed class DiBinding :
 
 	public IDiBinding InGlobal()
 	{
-		Requires.ValidOperation(LifeTime == LifeTime.External, this, nameof(InGlobal));
+		Requires.ValidOperation(LifeTime == LifeTime.External, this);
 
 		LifeTime = LifeTime.Global;
 
@@ -33,7 +33,7 @@ public sealed class DiBinding :
 
 	public IDiBinding InLocal()
 	{
-		Requires.ValidOperation(LifeTime == LifeTime.External, this, nameof(InLocal));
+		Requires.ValidOperation(LifeTime == LifeTime.External, this);
 
 		LifeTime = LifeTime.Local;
 
@@ -47,7 +47,7 @@ public sealed class DiBinding :
 	public new IDiBindingSingleton To<T>()
 		where T : class
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(To));
+		Requires.ValidOperation(LifeTime != LifeTime.External, this);
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 
 		var instanceProvider = new InstanceProviderActivator(typeof(T),
@@ -59,7 +59,7 @@ public sealed class DiBinding :
 
 	public new void To(object instance)
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(To));
+		Requires.ValidOperation(LifeTime != LifeTime.External, this);
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 		Requires.NotNull(instance, nameof(instance));
 		Requires.ReferenceType(instance.GetType(), nameof(instance));
@@ -71,7 +71,7 @@ public sealed class DiBinding :
 	public IDiBindingSingleton ToFactory<T>()
 		where T : class, IFactory
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(ToFactory));
+		Requires.ValidOperation(LifeTime != LifeTime.External, this);
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 
 		var instanceProvider = new InstanceProviderFactory(
@@ -84,7 +84,7 @@ public sealed class DiBinding :
 
 	public IDiBindingSingleton ToFactory(IFactory factory)
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this, nameof(ToFactory));
+		Requires.ValidOperation(LifeTime != LifeTime.External, this);
 		Requires.ValidOperation(Values == null, this, nameof(Values));
 		Requires.NotNull(factory, nameof(factory));
 
@@ -101,7 +101,7 @@ public sealed class DiBinding :
 
 	public void ToSingleton()
 	{
-		Requires.ValidOperation(Values != null, this, nameof(Values));
+		Requires.ValidOperation(Values != null, this);
 
 		var value = Values?.First();
 		var instanceProvider = value as IInstanceProvider;

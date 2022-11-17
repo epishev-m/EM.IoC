@@ -6,9 +6,9 @@ using Foundation;
 
 public interface IDiContainer
 {
-	object GetInstance(Type type);
+	object Resolve(Type type);
 
-	T GetInstance<T>()
+	T Resolve<T>()
 		where T : class;
 
 	IDiBindingLifeTime Bind<T>()

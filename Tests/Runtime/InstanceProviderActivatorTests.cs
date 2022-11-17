@@ -1,10 +1,8 @@
-﻿using EM.IoC;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using EM.Foundation;
+using EM.IoC;
+using NUnit.Framework;
 
 internal sealed class InstanceProviderActivatorTests
 {
@@ -84,7 +82,8 @@ internal sealed class InstanceProviderActivatorTests
 
 		// Act
 		var provider = new InstanceProviderActivator(type, reflector, container);
-		var instance = provider.GetInstance();
+		var result = provider.GetInstance();
+		var instance = result.Data;
 		var actual = instance is Test;
 
 		// Assert
@@ -107,14 +106,16 @@ internal sealed class InstanceProviderActivatorTests
 	private sealed class Reflector :
 		IReflector
 	{
-		public IReflectionInfo GetReflectionInfo<T>()
+		public Result<IReflectionInfo> GetReflectionInfo<T>()
 		{
 			return GetReflectionInfo(typeof(T));
 		}
 
-		public IReflectionInfo GetReflectionInfo(Type type)
+		public Result<IReflectionInfo> GetReflectionInfo(Type type)
 		{
-			return new ReflectionInfo(type);
+			var reflectionInfo = new ReflectionInfo(type);
+
+			return new SuccessResult<IReflectionInfo>(reflectionInfo);
 		}
 	}
 
@@ -127,7 +128,7 @@ internal sealed class InstanceProviderActivatorTests
 			throw new NotImplementedException();
 		}
 
-		public object GetInstance(Type type)
+		public object Resolve(Type type)
 		{
 			var result = default(object);
 
@@ -139,7 +140,7 @@ internal sealed class InstanceProviderActivatorTests
 			return result;
 		}
 
-		public T GetInstance<T>()
+		public T Resolve<T>()
 			where T : class
 		{
 			throw new NotImplementedException();

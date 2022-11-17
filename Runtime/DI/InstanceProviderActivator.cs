@@ -1,12 +1,11 @@
 ﻿namespace EM.IoC
 {
 
-using Foundation;
 using System;
 using System.Linq;
+using Foundation;
 
-public sealed class InstanceProviderActivator :
-	IInstanceProvider
+public sealed class InstanceProviderActivator : IInstanceProvider
 {
 	private readonly Type _type;
 
@@ -16,19 +15,29 @@ public sealed class InstanceProviderActivator :
 
 	#region IInstanceProvider
 
-	public object GetInstance()
+	public Result<object> GetInstance()
 	{
-		var reflectionInfo = _reflector.GetReflectionInfo(_type);
+		var resultReflectionInfo = _reflector.GetReflectionInfo(_type);
 
-		Requires.NotNull(reflectionInfo.ConstructorInfo, nameof(reflectionInfo.ConstructorInfo));
+		if (resultReflectionInfo.Failure)
+		{
+			return new ErrorResult<object>(DiStringResources.FailedToCreate(this));
+		}
 
-		var args = reflectionInfo.ConstructorParametersTypes
-			.Select(t => _diContainer.GetInstance(t))
+		var result = resultReflectionInfo.Data.GetConstructorParamTypes();
+
+		if (result.Failure)
+		{
+			return new ErrorResult<object>(DiStringResources.CouldNotFindConstructor(this));
+		}
+
+		var args = result.Data
+			.Select(t => _diContainer.Resolve(t))
 			.ToArray();
 
 		var instance = Activator.CreateInstance(_type, args);
 
-		return instance;
+		return new SuccessResult<object>(instance);
 	}
 
 	#endregion

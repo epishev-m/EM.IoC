@@ -1,10 +1,8 @@
-﻿using EM.IoC;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using EM.Foundation;
+using EM.IoC;
+using NUnit.Framework;
 
 internal sealed class DiContainerTests
 {
@@ -56,7 +54,7 @@ internal sealed class DiContainerTests
 		var container = new DiContainer(reflector);
 
 		// Act
-		var actual = container.GetInstance<Test>();
+		var actual = container.Resolve<Test>();
 
 		//Assert
 		Assert.AreEqual(null, actual);
@@ -74,7 +72,7 @@ internal sealed class DiContainerTests
 			.To<Test>();
 
 		// Act
-		var instance = container.GetInstance<Test>();
+		var instance = container.Resolve<Test>();
 
 		//Assert
 		Assert.IsNotNull(instance);
@@ -95,7 +93,7 @@ internal sealed class DiContainerTests
 		// Act
 		try
 		{
-			var unused = container.GetInstance(null);
+			var unused = container.Resolve(null);
 		}
 		catch (ArgumentNullException)
 		{
@@ -155,7 +153,7 @@ internal sealed class DiContainerTests
 
 		// Act
 		var unused = container.Unbind<Test>();
-		var actual = container.GetInstance<Test>();
+		var actual = container.Resolve<Test>();
 
 		//Assert
 		Assert.IsNull(actual);
@@ -174,7 +172,7 @@ internal sealed class DiContainerTests
 
 		// Act
 		container.UnbindAll();
-		var actual = container.GetInstance<Test>();
+		var actual = container.Resolve<Test>();
 
 		//Assert
 		Assert.IsNull(actual);
@@ -193,7 +191,7 @@ internal sealed class DiContainerTests
 
 		// Act
 		container.Unbind(LifeTime.Global);
-		var actual = container.GetInstance<Test>();
+		var actual = container.Resolve<Test>();
 
 		//Assert
 		Assert.IsNull(actual);
@@ -212,7 +210,7 @@ internal sealed class DiContainerTests
 
 		// Act
 		container.Unbind(LifeTime.Global);
-		var actual = container.GetInstance<Test>();
+		var actual = container.Resolve<Test>();
 
 		//Assert
 		Assert.IsNotNull(actual);
@@ -239,14 +237,16 @@ internal sealed class DiContainerTests
 	private sealed class Reflector :
 		IReflector
 	{
-		public IReflectionInfo GetReflectionInfo<T>()
+		public Result<IReflectionInfo> GetReflectionInfo<T>()
 		{
 			return GetReflectionInfo(typeof(T));
 		}
 
-		public IReflectionInfo GetReflectionInfo(Type type)
+		public Result<IReflectionInfo> GetReflectionInfo(Type type)
 		{
-			return new ReflectionInfo(type);
+			var reflectionInfo = new ReflectionInfo(type);
+
+			return new SuccessResult<IReflectionInfo>(reflectionInfo);
 		}
 	}
 

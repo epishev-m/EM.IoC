@@ -1,12 +1,11 @@
 ﻿namespace EM.IoC
 {
 
-using Foundation;
 using System;
 using System.Linq;
+using Foundation;
 
-public sealed class DiContainer :
-	Binder,
+public sealed class DiContainer : Binder,
 	IDiContainer
 {
 	private readonly IReflector _reflector;
@@ -19,7 +18,7 @@ public sealed class DiContainer :
 		return base.Bind<T>() as IDiBindingLifeTime;
 	}
 
-	public object GetInstance(Type type)
+	public object Resolve(Type type)
 	{
 		var binding = GetBinding(type);
 
@@ -38,13 +37,20 @@ public sealed class DiContainer :
 		var instanceProvider = (IInstanceProvider) values.First();
 		var result = instanceProvider.GetInstance();
 
-		return result;
+		if (result.Failure)
+		{
+			return null;
+		}
+
+		var instance = result.Data;
+
+		return instance;
 	}
 
-	public T GetInstance<T>()
+	public T Resolve<T>()
 		where T : class
 	{
-		return GetInstance(typeof(T)) as T;
+		return Resolve(typeof(T)) as T;
 	}
 
 	public bool Unbind<T>()

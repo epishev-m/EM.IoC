@@ -1,11 +1,9 @@
-﻿using EM.Foundation;
-using EM.IoC;
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Reflection;
+using EM.Foundation;
+using EM.IoC;
+using NUnit.Framework;
 
 internal sealed class DiBindingTests
 {
@@ -663,7 +661,7 @@ internal sealed class DiBindingTests
 	private sealed class TestFactory :
 		IFactory
 	{
-		public bool TryCreate(out object instance)
+		public Result<object> Create()
 		{
 			throw new NotImplementedException();
 		}
@@ -676,8 +674,7 @@ internal sealed class DiBindingTests
 	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	private sealed class Test
 	{
-		public Test(
-			A param)
+		public Test(A param)
 		{
 		}
 	}
@@ -689,14 +686,16 @@ internal sealed class DiBindingTests
 	private sealed class Reflector :
 		IReflector
 	{
-		public IReflectionInfo GetReflectionInfo<T>()
+		public Result<IReflectionInfo> GetReflectionInfo<T>()
 		{
 			return GetReflectionInfo(typeof(T));
 		}
 
-		public IReflectionInfo GetReflectionInfo(Type type)
+		public Result<IReflectionInfo> GetReflectionInfo(Type type)
 		{
-			return new ReflectionInfo(type);
+			var reflectionInfo = new ReflectionInfo(type);
+
+			return new SuccessResult<IReflectionInfo>(reflectionInfo);
 		}
 	}
 
@@ -709,7 +708,7 @@ internal sealed class DiBindingTests
 			throw new NotImplementedException();
 		}
 
-		public object GetInstance(
+		public object Resolve(
 			Type type)
 		{
 			var result = default(object);
@@ -722,7 +721,7 @@ internal sealed class DiBindingTests
 			return result;
 		}
 
-		public T GetInstance<T>()
+		public T Resolve<T>()
 			where T : class
 		{
 			throw new NotImplementedException();

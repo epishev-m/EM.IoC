@@ -1,13 +1,10 @@
 {
-	"name": "com.em.ioc",
-	"displayName": "EM IoC",
-	"version": "0.0.2",
-    "unity": "2020.1",
-    "unityRelease": "7f1",
-	"dependencies": {
-	},
-    "author": {
-        "name": "Maxim Epishev",
-        "email": "epishev.m@mail.ru"
-    }
+  "name": "com.em.ioc",
+  "displayName": "EM.IoC",
+  "version": "0.0.1",
+  "author": {
+    "name": "Maxim Epishev",
+    "email": "epishev.m@mail.ru"
+  },
+  "type": "library"
 }

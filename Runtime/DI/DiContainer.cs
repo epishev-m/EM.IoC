@@ -86,7 +86,7 @@ public sealed class DiContainer : Binder,
 
 	public DiContainer(IReflector reflector)
 	{
-		Requires.NotNull(reflector, nameof(reflector));
+		Requires.NotNullParam(reflector, nameof(reflector));
 
 		_reflector = reflector;
 	}

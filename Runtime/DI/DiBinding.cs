@@ -61,7 +61,7 @@ public sealed class DiBinding :
 	{
 		Requires.ValidOperation(LifeTime != LifeTime.External, this);
 		Requires.ValidOperation(Values == null, this, nameof(Values));
-		Requires.NotNull(instance, nameof(instance));
+		Requires.NotNullParam(instance, nameof(instance));
 		Requires.ReferenceType(instance.GetType(), nameof(instance));
 
 		var instanceProvider = new InstanceProvider(instance);
@@ -86,9 +86,10 @@ public sealed class DiBinding :
 	{
 		Requires.ValidOperation(LifeTime != LifeTime.External, this);
 		Requires.ValidOperation(Values == null, this, nameof(Values));
-		Requires.NotNull(factory, nameof(factory));
+		Requires.NotNullParam(factory, nameof(factory));
 
-		var instanceProvider = new InstanceProviderFactory(new InstanceProvider(factory));
+		var instanceProvider = new InstanceProviderFactory(
+			new InstanceProvider(factory));
 
 		var unused = base.To(instanceProvider);
 
@@ -124,8 +125,8 @@ public sealed class DiBinding :
 			name,
 			resolver)
 	{
-		Requires.NotNull(reflector, nameof(reflector));
-		Requires.NotNull(container, nameof(container));
+		Requires.NotNullParam(reflector, nameof(reflector));
+		Requires.NotNullParam(container, nameof(container));
 
 		_container = container;
 		_reflector = reflector;

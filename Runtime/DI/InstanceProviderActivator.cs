@@ -48,9 +48,9 @@ public sealed class InstanceProviderActivator : IInstanceProvider
 		IReflector reflector,
 		IDiContainer diContainer)
 	{
-		Requires.NotNull(type, nameof(type));
-		Requires.NotNull(reflector, nameof(reflector));
-		Requires.NotNull(diContainer, nameof(diContainer));
+		Requires.NotNullParam(type, nameof(type));
+		Requires.NotNullParam(reflector, nameof(reflector));
+		Requires.NotNullParam(diContainer, nameof(diContainer));
 
 		_type = type;
 		_reflector = reflector;

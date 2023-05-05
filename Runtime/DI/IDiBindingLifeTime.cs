@@ -13,6 +13,8 @@ public interface IDiBindingLifeTime
 	IDiBinding InGlobal();
 
 	IDiBinding InLocal();
+
+	IDiBinding SetLifeTime(LifeTime lifeTime);
 }
 
 }

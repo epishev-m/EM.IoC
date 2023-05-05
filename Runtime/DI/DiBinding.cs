@@ -40,6 +40,15 @@ public sealed class DiBinding :
 		return this;
 	}
 
+	public IDiBinding SetLifeTime(LifeTime lifeTime)
+	{
+		Requires.ValidOperation(LifeTime == LifeTime.External, this);
+
+		LifeTime = lifeTime;
+
+		return this;
+	}
+
 	#endregion
 
 	#region IDiBinding

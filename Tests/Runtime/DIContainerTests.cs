@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using EM.Foundation;
 using EM.IoC;
@@ -44,10 +45,10 @@ internal sealed class DiContainerTests
 
 	#endregion
 
-	#region GetInstance
+	#region Resolve
 
 	[Test]
-	public void DIContainer_GetInstanceGeneral_ReturnNull()
+	public void DIContainer_ResolveGeneric_ReturnNull()
 	{
 		// Arrange
 		var reflector = new Reflector();
@@ -61,7 +62,7 @@ internal sealed class DiContainerTests
 	}
 
 	[Test]
-	public void DIContainer_GetInstanceGeneral()
+	public void DIContainer_ResolveGeneric()
 	{
 		// Arrange
 		var reflector = new Reflector();
@@ -102,6 +103,58 @@ internal sealed class DiContainerTests
 
 		//Assert
 		Assert.IsTrue(actual);
+	}
+
+	[Test]
+	public void DIContainer_ResolveAllGeneric()
+	{
+		// Arrange
+		var reflector = new Reflector();
+		var container = new DiContainer(reflector);
+
+		container.Bind<ITest>()
+			.InGlobal()
+			.To<Test>()
+			.To<Test>();
+
+		// Act
+		var instance = container.ResolveAll<ITest>();
+
+		//Assert
+		Assert.IsNotNull(instance);
+		Assert.IsTrue(instance.Count == 2);
+	}
+	
+	[Test]
+	public void DIContainer_ResolveAllGeneric_Constructor()
+	{
+		// Arrange
+		var reflector = new Reflector();
+		var container = new DiContainer(reflector);
+
+		container.Bind<TestParam>()
+			.InGlobal()
+			.To(new TestParam());
+
+		container.Bind<ITest>()
+			.InGlobal()
+			.To<Test>();
+
+		container.Bind<ITest>()
+			.To(new TestToo());
+		
+		container.Bind<TestListParam>()
+			.InGlobal()
+			.To<TestListParam>()
+			.AsSingle();
+
+		// Act
+		var instance = container.Resolve<TestListParam>();
+
+		//Assert
+		Assert.IsNotNull(instance);
+		Assert.IsNotNull(instance.Param);
+		Assert.IsNotNull(instance.List);
 	}
 
 	#endregion
@@ -219,14 +272,35 @@ internal sealed class DiContainerTests
 	#endregion
 
 	#region Nested
+	
+	private interface ITest
+	{
+	}
 
 	[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 	[SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
-	private sealed class Test
+	private sealed class Test : ITest
 	{
-		public Test(
-			TestParam param)
+		public Test(TestParam param)
 		{
+		}
+	}
+	
+	private sealed class TestToo : ITest
+	{
+	}
+
+	private sealed class TestListParam
+	{
+		public readonly TestParam Param;
+
+		public readonly List<ITest> List;
+
+		public TestListParam(TestParam param,
+			List<ITest> list)
+		{
+			Param = param;
+			List = list;
 		}
 	}
 
@@ -234,8 +308,7 @@ internal sealed class DiContainerTests
 	{
 	}
 
-	private sealed class Reflector :
-		IReflector
+	private sealed class Reflector : IReflector
 	{
 		public Result<IReflectionInfo> GetReflectionInfo<T>()
 		{

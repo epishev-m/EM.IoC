@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using EM.Foundation;
@@ -219,32 +221,6 @@ internal sealed class DiBindingTests
 	}
 
 	[Test]
-	public void DIBinding_To_ToException()
-	{
-		// Arrange
-		var actual = false;
-		var instance = new Test(null);
-		var reflector = new Reflector();
-		var container = new DiContainer();
-		var key = typeof(Test);
-		var binding = new DiBinding(reflector, container, key, null, null);
-		binding.InGlobal().To(instance);
-
-		// Act
-		try
-		{
-			binding.To(instance);
-		}
-		catch (InvalidOperationException)
-		{
-			actual = true;
-		}
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	[Test]
 	public void DIBinding_To_IsReferenceTypeException()
 	{
 		// Arrange
@@ -319,31 +295,6 @@ internal sealed class DiBindingTests
 		var container = new DiContainer();
 		var key = typeof(Test);
 		var binding = new DiBinding(reflector, container, key, null, null);
-
-		// Act
-		try
-		{
-			binding.To<Test>();
-		}
-		catch (InvalidOperationException)
-		{
-			actual = true;
-		}
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	[Test]
-	public void DIBinding_ToGeneric_ToGeneric_Exception()
-	{
-		// Arrange
-		var actual = false;
-		var reflector = new Reflector();
-		var container = new DiContainer();
-		var key = typeof(Test);
-		var binding = new DiBinding(reflector, container, key, null, null);
-		binding.InGlobal().To<Test>();
 
 		// Act
 		try
@@ -443,32 +394,6 @@ internal sealed class DiBindingTests
 	}
 
 	[Test]
-	public void DIBinding_ToFactory_IsInvalidOperationException()
-	{
-		// Arrange
-		var actual = false;
-		var instance = new TestFactory();
-		var reflector = new Reflector();
-		var container = new DiContainer();
-		var key = typeof(TestFactory);
-		var binding = new DiBinding(reflector, container, key, null, null);
-		binding.InGlobal().ToFactory(instance);
-
-		// Act
-		try
-		{
-			binding.ToFactory(instance);
-		}
-		catch (InvalidOperationException)
-		{
-			actual = true;
-		}
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	[Test]
 	public void DIBinding_ToFactoryAndGetValues()
 	{
 		// Arrange
@@ -503,31 +428,6 @@ internal sealed class DiBindingTests
 		binding.InGlobal().ToFactory(instance);
 
 		void Resolver(IBinding unused) => actual = true;
-
-		// Assert
-		Assert.IsTrue(actual);
-	}
-
-	[Test]
-	public void DIBinding_ToFactoryGeneric_InvalidOperationException()
-	{
-		// Arrange
-		var actual = false;
-		var reflector = new Reflector();
-		var container = new DiContainer();
-		var key = typeof(TestFactory);
-		var binding = new DiBinding(reflector, container, key, null, null);
-		binding.InGlobal().ToFactory<TestFactory>();
-
-		// Act
-		try
-		{
-			binding.ToFactory<TestFactory>();
-		}
-		catch (InvalidOperationException)
-		{
-			actual = true;
-		}
 
 		// Assert
 		Assert.IsTrue(actual);
@@ -605,7 +505,7 @@ internal sealed class DiBindingTests
 		// Act
 		try
 		{
-			binding.ToSingleton();
+			binding.AsSingle();
 		}
 		catch (InvalidOperationException)
 		{
@@ -627,7 +527,7 @@ internal sealed class DiBindingTests
 		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.InGlobal().To<Test>().ToSingleton();
+		binding.InGlobal().To<Test>().AsSingle();
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider?.GetType();
 
@@ -646,7 +546,7 @@ internal sealed class DiBindingTests
 		var binding = new DiBinding(reflector, container, key, null, null);
 
 		// Act
-		binding.InGlobal().ToFactory<TestFactory>().ToSingleton();
+		binding.InGlobal().ToFactory<TestFactory>().AsSingle();
 		var provider = binding.Values.FirstOrDefault();
 		var actual = provider?.GetType();
 
@@ -702,7 +602,12 @@ internal sealed class DiBindingTests
 	private sealed class DiContainer :
 		IDiContainer
 	{
-		public IDiBindingLifeTime Bind<T>()
+		public List<T> ResolveAll<T>() where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDiBinding Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -723,6 +628,11 @@ internal sealed class DiBindingTests
 
 		public T Resolve<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList ResolveAll(Type type)
 		{
 			throw new NotImplementedException();
 		}

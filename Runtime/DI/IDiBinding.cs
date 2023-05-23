@@ -5,15 +5,28 @@ using Foundation;
 
 public interface IDiBinding
 {
-	IDiBindingSingleton To<T>()
+	LifeTime LifeTime
+	{
+		get;
+	}
+
+	IDiBinding InGlobal();
+
+	IDiBinding InLocal();
+
+	IDiBinding SetLifeTime(LifeTime lifeTime);
+	
+	IDiBinding To<T>()
 		where T : class;
 
-	void To(object obj);
+	IDiBinding To(object obj);
 
-	IDiBindingSingleton ToFactory<T>()
+	IDiBinding ToFactory<T>()
 		where T : class, IFactory;
 
-	IDiBindingSingleton ToFactory(IFactory factory);
+	IDiBinding ToFactory(IFactory factory);
+
+	void AsSingle();
 }
 
 }

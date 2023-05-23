@@ -2,6 +2,8 @@
 {
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Foundation;
 
 public interface IDiContainer
@@ -10,8 +12,13 @@ public interface IDiContainer
 
 	T Resolve<T>()
 		where T : class;
+	
+	IList ResolveAll(Type type);
 
-	IDiBindingLifeTime Bind<T>()
+	List<T> ResolveAll<T>()
+		where T : class;
+
+	IDiBinding Bind<T>()
 		where T : class;
 
 	bool Unbind<T>()

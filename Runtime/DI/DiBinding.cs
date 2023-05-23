@@ -6,25 +6,23 @@ using System.Linq;
 
 public sealed class DiBinding :
 	Binding,
-	IDiBindingSingleton,
-	IDiBinding,
-	IDiBindingLifeTime
+	IDiBinding
 {
 	private readonly IReflector _reflector;
 
 	private readonly IDiContainer _container;
 
-	#region IDiBindingLifeTime
+	#region IDiBinding
 
 	public LifeTime LifeTime
 	{
 		get;
 		private set;
-	} = LifeTime.External;
+	} = LifeTime.None;
 
 	public IDiBinding InGlobal()
 	{
-		Requires.ValidOperation(LifeTime == LifeTime.External, this);
+		Requires.ValidOperation(LifeTime == LifeTime.None, this);
 
 		LifeTime = LifeTime.Global;
 
@@ -33,7 +31,7 @@ public sealed class DiBinding :
 
 	public IDiBinding InLocal()
 	{
-		Requires.ValidOperation(LifeTime == LifeTime.External, this);
+		Requires.ValidOperation(LifeTime == LifeTime.None, this);
 
 		LifeTime = LifeTime.Local;
 
@@ -42,76 +40,70 @@ public sealed class DiBinding :
 
 	public IDiBinding SetLifeTime(LifeTime lifeTime)
 	{
-		Requires.ValidOperation(LifeTime == LifeTime.External, this);
+		Requires.ValidOperation(LifeTime == LifeTime.None, this);
 
 		LifeTime = lifeTime;
 
 		return this;
 	}
 
-	#endregion
-
-	#region IDiBinding
-
-	public new IDiBindingSingleton To<T>()
+	public new IDiBinding To<T>()
 		where T : class
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this);
-		Requires.ValidOperation(Values == null, this, nameof(Values));
+		Requires.ValidOperation(LifeTime != LifeTime.None, this);
+
+		ValidInstanceProviderSingleton();
 
 		var instanceProvider = new InstanceProviderActivator(typeof(T),
 			_reflector,
 			_container);
 
-		return base.To(instanceProvider) as IDiBindingSingleton;
+		return base.To(instanceProvider) as IDiBinding;
 	}
 
-	public new void To(object instance)
+	public new IDiBinding To(object instance)
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this);
-		Requires.ValidOperation(Values == null, this, nameof(Values));
+		Requires.ValidOperation(LifeTime != LifeTime.None, this);
 		Requires.NotNullParam(instance, nameof(instance));
 		Requires.ReferenceType(instance.GetType(), nameof(instance));
 
+		ValidInstanceProviderSingleton();
+		
 		var instanceProvider = new InstanceProvider(instance);
-		var unused = base.To(instanceProvider);
+
+		return base.To(instanceProvider) as IDiBinding;
 	}
 
-	public IDiBindingSingleton ToFactory<T>()
+	public IDiBinding ToFactory<T>()
 		where T : class, IFactory
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this);
-		Requires.ValidOperation(Values == null, this, nameof(Values));
+		Requires.ValidOperation(LifeTime != LifeTime.None, this);
 
+		ValidInstanceProviderSingleton();
+		
 		var instanceProvider = new InstanceProviderFactory(
 			new InstanceProviderActivator(typeof(T), _reflector, _container));
 
-		var unused = base.To(instanceProvider);
-
-		return this;
+		return base.To(instanceProvider) as IDiBinding;
 	}
 
-	public IDiBindingSingleton ToFactory(IFactory factory)
+	public IDiBinding ToFactory(IFactory factory)
 	{
-		Requires.ValidOperation(LifeTime != LifeTime.External, this);
-		Requires.ValidOperation(Values == null, this, nameof(Values));
+		Requires.ValidOperation(LifeTime != LifeTime.None, this);
 		Requires.NotNullParam(factory, nameof(factory));
 
+		ValidInstanceProviderSingleton();
+		
 		var instanceProvider = new InstanceProviderFactory(
 			new InstanceProvider(factory));
 
-		var unused = base.To(instanceProvider);
-
-		return this;
+		return base.To(instanceProvider) as IDiBinding;
 	}
 
-	#endregion
-
-	#region IDiBindingSingleton
-
-	public void ToSingleton()
+	public void AsSingle()
 	{
 		Requires.ValidOperation(Values != null, this);
+		Requires.ValidOperation(Values != null && Values.Count() == 1, this);
 
 		var value = Values?.First();
 		var instanceProvider = value as IInstanceProvider;
@@ -129,8 +121,7 @@ public sealed class DiBinding :
 		object key,
 		object name,
 		Resolver resolver)
-		:
-		base(key,
+		: base(key,
 			name,
 			resolver)
 	{
@@ -139,6 +130,16 @@ public sealed class DiBinding :
 
 		_container = container;
 		_reflector = reflector;
+	}
+
+	private void ValidInstanceProviderSingleton()
+	{
+		var value = Values?.First();
+
+		if (value != null)
+		{
+			Requires.ValidOperation(value is not InstanceProviderSingleton, this);
+		}
 	}
 
 	#endregion

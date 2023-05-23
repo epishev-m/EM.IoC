@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using EM.Foundation;
 using EM.IoC;
@@ -122,7 +124,12 @@ internal sealed class InstanceProviderActivatorTests
 	private sealed class DiContainer :
 		IDiContainer
 	{
-		public IDiBindingLifeTime Bind<T>()
+		public List<T> ResolveAll<T>() where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDiBinding Bind<T>()
 			where T : class
 		{
 			throw new NotImplementedException();
@@ -142,6 +149,11 @@ internal sealed class InstanceProviderActivatorTests
 
 		public T Resolve<T>()
 			where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList ResolveAll(Type type)
 		{
 			throw new NotImplementedException();
 		}

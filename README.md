@@ -1,5 +1,7 @@
 # EM.IoC
 
+DI container, dependency injection via constructor only, object lifetime control
+
 ## Installation
 
 ### Git
